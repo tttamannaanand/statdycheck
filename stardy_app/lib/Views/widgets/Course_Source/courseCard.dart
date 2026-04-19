@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../color_codes.dart';
 import 'courseModel.dart';
-
 import '../../screens/Course_details_page.dart';
 
 class CourseCard extends StatelessWidget {
@@ -11,142 +10,141 @@ class CourseCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 20),
-      decoration: BoxDecoration(
-        color: AppColors.black,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          /// IMAGE
-          ClipRRect(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-            child: Stack(
-              children: [
-                Image.asset(
-                  course.image,
-                  height: 180,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
-                Positioned(
-                  top: 12,
-                  left: 12,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 6,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.blue,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text(
-                      course.category,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => CourseDetailsPage(course: course)),
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 14),
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: AppColors.secondary,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Row(
+          children: [
+            // ───────── IMAGE ─────────
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.asset(
+                course.image,
+                height: 90,
+                width: 90,
+                fit: BoxFit.cover,
+              ),
             ),
-          ),
 
-          /// CONTENT
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                /// TITLE + RATING
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      course.title,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        const Icon(Icons.star, color: Colors.orange),
-                        const SizedBox(width: 4),
-                        Text(
-                          course.rating.toString(),
-                          style: const TextStyle(color: Colors.orange),
+            const SizedBox(width: 12),
+
+            // ───────── CONTENT ─────────
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // TITLE + RATING
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          course.title,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
-                      ],
-                    ),
-                  ],
-                ),
-
-                const SizedBox(height: 16),
-
-                /// PROGRESS
-                const Text(
-                  "PROGRESS",
-                  style: TextStyle(
-                    color: AppColors.lightGrey,
-                    fontSize: 12,
-                    letterSpacing: 1.5,
+                      ),
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.star,
+                            color: Colors.orange,
+                            size: 16,
+                          ),
+                          const SizedBox(width: 2),
+                          Text(
+                            course.rating.toString(),
+                            style: const TextStyle(
+                              color: Colors.orange,
+                              fontSize: 13,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                ),
 
-                const SizedBox(height: 8),
+                  const SizedBox(height: 6),
 
-                Row(
-                  children: [
-                    Expanded(
-                      child: LinearProgressIndicator(
-                        value: course.progress,
-                        backgroundColor: Colors.grey[800],
-                        color: AppColors.darkRed,
-                        minHeight: 6,
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Text(
-                      "${(course.progress * 100).toInt()}%",
-                      style: const TextStyle(color: Colors.grey),
-                    ),
-                  ],
-                ),
-
-                const SizedBox(height: 16),
-
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.darkRed,
-                      shape: const StadiumBorder(),
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              CourseDetailsPage(course: course),
-                        ),
-                      );
-                    },
-                    child: const Text(
-                      "Resume",
-                      style: TextStyle(color: AppColors.white),
+                  // CATEGORY
+                  Text(
+                    course.category,
+                    style: const TextStyle(
+                      color: AppColors.textSecondary,
+                      fontSize: 12,
                     ),
                   ),
-                ),
-              ],
+
+                  const SizedBox(height: 10),
+
+                  // PROGRESS BAR
+                  Row(
+                    children: [
+                      Expanded(
+                        child: LinearProgressIndicator(
+                          value: course.progress,
+                          backgroundColor: Colors.grey[800],
+                          color: AppColors.primary,
+                          minHeight: 5,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        "${(course.progress * 100).toInt()}%",
+                        style: const TextStyle(
+                          color: Colors.grey,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+
+            const SizedBox(width: 10),
+
+            // ───────── BUTTON ─────────
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                shape: const StadiumBorder(),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 8,
+                ),
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => CourseDetailsPage(course: course),
+                  ),
+                );
+              },
+              child: const Text(
+                "Resume",
+                style: TextStyle(color: Colors.white, fontSize: 12),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

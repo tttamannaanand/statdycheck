@@ -1,200 +1,220 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
-import '../widgets/color_codes.dart';
-import '../widgets/Course_Source/courseCard.dart';
-import '../widgets/Course_Source/course_data.dart';
+import 'package:stardy_app/Views/widgets/Course_Source/courseCard.dart';
+import 'package:stardy_app/Views/widgets/Course_Source/course_data.dart';
+import 'package:stardy_app/Views/widgets/color_codes.dart';
 
-class LearnPage extends StatefulWidget {
-  const LearnPage({super.key});
+class Learnpage extends StatefulWidget {
+  const Learnpage({super.key});
 
   @override
-  State<LearnPage> createState() => _LearnPageState();
+  State<Learnpage> createState() => _LearnpageState();
 }
 
-class _LearnPageState extends State<LearnPage> {
-  final int dayStreak = 8;
-  bool isSearching = false;
+class _LearnpageState extends State<Learnpage> {
+  bool showStreak = true;
 
-  String selectedCategory = "Beginner";
+  @override
+  void initState() {
+    super.initState();
+
+    Timer(const Duration(seconds: 5), () {
+      if (mounted) {
+        setState(() {
+          showStreak = false;
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: AppColors.background,
 
-      appBar: AppBar(
-        toolbarHeight: 60,
-        backgroundColor: AppColors.black,
-        elevation: 0,
-        titleSpacing: 16,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text(
-              "Learning Center",
-              style: TextStyle(
-                color: AppColors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-              ),
-            ),
-            Container(
-              height: 32,
-              width: 32,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                image: const DecorationImage(
-                  image: AssetImage("assets/images/stardy-logo.png"),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-          ],
-        ),
-
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(95), // 🔥 MORE SPACE
+      // 🔥 APPBAR
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(showStreak ? 240 : 180),
+        child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-            child: isSearching ? _buildSearchBar() : _buildHeaderWithTabs(),
-          ),
-        ),
-      ),
-
-      body: SafeArea(
-        top: false,
-        child: Container(
-          color: AppColors.white, // 👈 BODY BACKGROUND
-          padding: const EdgeInsets.fromLTRB(14, 2, 14, 0),
-          child: ListView(
-            children: courses
-                .where((course) => course.category == selectedCategory)
-                .map((course) => CourseCard(course: course))
-                .toList(),
-          ),
-        ),
-      ),
-    );
-  }
-
-  // ───────────────── HEADER + TABS ─────────────────
-  Widget _buildHeaderWithTabs() {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
               children: [
-                const Icon(Icons.flash_on, color: AppColors.darkRed, size: 18),
-                const SizedBox(width: 6),
-                Text(
-                  "$dayStreak Day Streak",
-                  style: const TextStyle(
-                    color: AppColors.darkRed,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14,
+                const SizedBox(height: 10),
+
+                // 🔔 Top Row
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Icon(
+                      Icons.notifications_none,
+                      color: AppColors.primaryDark,
+                    ),
+                    const CircleAvatar(
+                      radius: 20,
+                      backgroundImage: AssetImage(
+                        "assets/images/stardy-logo.png",
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 15),
+
+                // 🔴 Streak Banner
+                if (showStreak)
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.primary,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Row(
+                      children: [
+                        const Expanded(
+                          child: Text(
+                            "Continue your 7 day learning Streak !! 🔥",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() => showStreak = false);
+                          },
+                          child: const Icon(
+                            Icons.close,
+                            color: Colors.white,
+                            size: 18,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
+
+                if (showStreak) const SizedBox(height: 15),
+
+                // 🔍 Search
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: AppColors.secondary,
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: AppColors.secondary),
+                  ),
+                  child: const Row(
+                    children: [
+                      Icon(Icons.search, color: AppColors.textSecondary),
+                      SizedBox(width: 10),
+                      Text(
+                        "Search",
+                        style: TextStyle(color: AppColors.textSecondary),
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 15),
+
+                // 🟢 Chips
+                Row(
+                  children: [
+                    _chip("Beginner", true),
+                    _chip("Intermediate", false),
+                    _chip("Advanced", false),
+                  ],
                 ),
               ],
             ),
-            IconButton(
-              padding: EdgeInsets.zero,
-              constraints: const BoxConstraints(),
-              icon: const Icon(Icons.search, color: AppColors.white, size: 22),
-              onPressed: () {
-                setState(() {
-                  isSearching = true;
-                });
-              },
-            ),
-          ],
-        ),
-
-        const SizedBox(height: 12),
-
-        _buildTabs(),
-      ],
-    );
-  }
-
-  // ───────────────── SEARCH BAR ─────────────────
-  Widget _buildSearchBar() {
-    return Row(
-      children: [
-        Expanded(
-          child: Container(
-            height: 48,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(26),
-            ),
-            child: const TextField(
-              autofocus: true,
-              decoration: InputDecoration(
-                hintText: "Search courses...",
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.symmetric(horizontal: 18),
-              ),
-            ),
           ),
         ),
-        IconButton(
-          icon: const Icon(Icons.close, color: AppColors.white, size: 22),
-          onPressed: () {
-            setState(() {
-              isSearching = false;
-            });
-          },
+      ),
+
+      // 📱 BODY
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 20),
+
+            // 📚 New Courses
+            const Text(
+              "New Courses",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+            ),
+
+            const SizedBox(height: 15),
+
+            SizedBox(
+              height: 220,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: [
+                  _courseCard(),
+                  const SizedBox(width: 15),
+                  _courseCard(),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 25),
+
+            // 📖 Continue Learning
+            const Text(
+              "Continue Learning",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+            ),
+
+            const SizedBox(height: 15),
+
+            Column(
+              children: courses.map((course) {
+                return CourseCard(course: course);
+              }).toList(),
+            ),
+
+            const SizedBox(height: 100),
+          ],
         ),
-      ],
+      ),
     );
   }
 
-  // ───────────────── CATEGORY TABS (INCREASED) ─────────────────
-  Widget _buildTabs() {
-    final tabs = ["Beginner", "Intermediate", "Advanced"];
-
-    return Container(
-      height: 50, // 🔥 BIGGER HEIGHT
-      padding: const EdgeInsets.all(4),
-      decoration: BoxDecoration(
-        color: const Color(0xFF1E1E1E),
-        borderRadius: BorderRadius.circular(28),
+  // 🔘 Chip
+  Widget _chip(String text, bool selected) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 10),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+        decoration: BoxDecoration(
+          color: selected ? AppColors.primaryDark : AppColors.secondary,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: AppColors.secondary),
+        ),
+        child: Text(
+          text,
+          style: TextStyle(
+            color: selected ? Colors.white : AppColors.textPrimary,
+          ),
+        ),
       ),
-      child: Row(
-        children: tabs.map((tab) {
-          final isSelected = selectedCategory == tab;
+    );
+  }
 
-          return Expanded(
-            child: GestureDetector(
-              onTap: () {
-                setState(() {
-                  selectedCategory = tab;
-                });
-              },
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                alignment: Alignment.center,
-                padding: const EdgeInsets.symmetric(
-                  vertical: 10,
-                ), // 🔥 MORE TAP AREA
-                decoration: BoxDecoration(
-                  color: isSelected ? AppColors.darkRed : Colors.transparent,
-                  borderRadius: BorderRadius.circular(24),
-                ),
-                child: Text(
-                  tab,
-                  style: TextStyle(
-                    fontSize: 15, // 🔥 BIGGER TEXT
-                    color: isSelected ? AppColors.white : AppColors.lightGrey,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ),
-          );
-        }).toList(),
+  // 📦 Course Card
+  Widget _courseCard() {
+    return Container(
+      width: 200,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        image: const DecorationImage(
+          image: AssetImage("assets/images/stardy-logo.png"),
+          fit: BoxFit.cover,
+        ),
       ),
     );
   }

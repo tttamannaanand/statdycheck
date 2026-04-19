@@ -1,79 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:stardy_app/Views/widgets/color_codes.dart';
-import 'package:stardy_app/data/notifiiers.dart';
+import 'package:stardy_app/Views/Pages/Home.dart';
+import 'package:stardy_app/Views/Pages/Learn_page.dart';
+import 'package:stardy_app/Views/Pages/Opportunity_page.dart';
+import '../widgets/glass_navbar.dart';
 
-class NavbarWidget extends StatefulWidget {
-  const NavbarWidget({super.key});
+class NavbarPage extends StatefulWidget {
+  const NavbarPage({super.key});
 
   @override
-  State<NavbarWidget> createState() => _NavbarWidgetState();
+  State<NavbarPage> createState() => _NavbarPageState();
 }
 
-class _NavbarWidgetState extends State<NavbarWidget> {
+class _NavbarPageState extends State<NavbarPage> {
+  int _currentIndex = 0;
+
+  final List<Widget> _pages = const [
+    HomePage(),
+    Learnpage(),
+    OpportunitiesPage(),
+  ];
+
+  void _onTap(int index) {
+    setState(() => _currentIndex = index);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<int>(
-      valueListenable: selectedPageNotifier,
-      builder: (context, selectedPage, child) {
-        return NavigationBarTheme(
-          data: NavigationBarThemeData(
-            backgroundColor: AppColors.black,
+    return Scaffold(
+      body: Stack(
+        children: [
+          _pages[_currentIndex],
 
-            indicatorColor: Colors.transparent,
-
-            iconTheme: MaterialStateProperty.resolveWith<IconThemeData>((
-              states,
-            ) {
-              if (states.contains(MaterialState.selected)) {
-                return IconThemeData(color: AppColors.darkRed, size: 26);
-              }
-              return const IconThemeData(color: Colors.grey, size: 24);
-            }),
-
-            labelTextStyle: MaterialStateProperty.resolveWith<TextStyle>((
-              states,
-            ) {
-              if (states.contains(MaterialState.selected)) {
-                return TextStyle(
-                  color: AppColors.darkRed,
-                  fontWeight: FontWeight.w600,
-                );
-              }
-              return const TextStyle(color: Colors.grey);
-            }),
-          ),
-
-          child: NavigationBar(
-            selectedIndex: selectedPage,
-            onDestinationSelected: (value) {
-              selectedPageNotifier.value = value;
-            },
-
-            destinations: const [
-              NavigationDestination(
-                icon: Icon(Icons.home_outlined),
-                selectedIcon: Icon(Icons.home),
-                label: 'Home',
-              ),
-              NavigationDestination(
-                icon: Icon(Icons.menu_book_outlined),
-                selectedIcon: Icon(Icons.menu_book),
-                label: 'Learn',
-              ),
-              NavigationDestination(
-                icon: Icon(Icons.work_outline),
-                selectedIcon: Icon(Icons.work),
-                label: 'Opportunity',
-              ),
-              NavigationDestination(
-                icon: Icon(Icons.person_outline),
-                selectedIcon: Icon(Icons.person),
-                label: 'Profile',
-              ),
-            ],
-          ),
-        );
-      },
+          GlassNavbar(currentIndex: _currentIndex, onTap: _onTap),
+        ],
+      ),
     );
   }
 }

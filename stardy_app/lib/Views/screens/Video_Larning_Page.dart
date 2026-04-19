@@ -114,9 +114,9 @@ class _VideoLearningPageState extends State<VideoLearningPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.black,
+      backgroundColor: AppColors.primaryDark,
       appBar: AppBar(
-        backgroundColor: AppColors.black,
+        backgroundColor: AppColors.primaryDark,
         iconTheme: const IconThemeData(color: Colors.white),
         title: Text(
           widget.course.title,
@@ -170,7 +170,7 @@ class _VideoLearningPageState extends State<VideoLearningPage> {
                 LinearProgressIndicator(
                   value: getProgress(),
                   backgroundColor: Colors.grey[800],
-                  color: AppColors.darkRed,
+                  color: AppColors.primary,
                   minHeight: 8,
                 ),
                 const SizedBox(height: 6),
@@ -192,7 +192,7 @@ class _VideoLearningPageState extends State<VideoLearningPage> {
 
                 return ExpansionTile(
                   collapsedIconColor: Colors.white,
-                  iconColor: AppColors.darkRed,
+                  iconColor: AppColors.primaryDark,
                   title: Text(
                     chapter.title,
                     style: const TextStyle(color: Colors.white),

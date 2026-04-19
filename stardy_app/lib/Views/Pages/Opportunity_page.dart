@@ -27,7 +27,7 @@ class _OpportunitiesPageState extends State<OpportunitiesPage> {
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(120),
         child: AppBar(
-          backgroundColor: AppColors.black,
+          backgroundColor: AppColors.primaryDark,
           elevation: 0,
           title: const Text(
             "Opportunities",

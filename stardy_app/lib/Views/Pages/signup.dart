@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stardy_app/Views/widgets/widget_tree.dart';
+import 'package:stardy_app/Views/widgets/NavBar.dart';
 
 class AuthPage extends StatefulWidget {
   const AuthPage({super.key});
@@ -27,7 +27,7 @@ class _AuthPageState extends State<AuthPage> {
   void _navigateToHome() {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => const widgetTree()),
+      MaterialPageRoute(builder: (context) => const NavbarPage()),
     );
   }
 

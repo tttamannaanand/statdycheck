@@ -7,7 +7,7 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.darkRed,
+      backgroundColor: AppColors.primary,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -35,7 +35,7 @@ class ProfilePage extends StatelessWidget {
                     child: Container(
                       height: 190,
                       width: double.infinity,
-                      color: AppColors.black,
+                      color: AppColors.primaryDark,
                     ),
                   ),
                   Column(
@@ -46,16 +46,16 @@ class ProfilePage extends StatelessWidget {
                         height: 158,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: AppColors.white,
+                          color: AppColors.background,
                           border: Border.all(
-                            color: AppColors.darkRed,
+                            color: AppColors.primary,
                             width: 4,
                           ),
                         ),
                         child: const Icon(
                           Icons.person,
                           size: 88,
-                          color: AppColors.darkRed,
+                          color: AppColors.primary,
                         ),
                       ),
 
@@ -68,7 +68,7 @@ class ProfilePage extends StatelessWidget {
                           vertical: 6,
                         ),
                         decoration: BoxDecoration(
-                          color: AppColors.darkRed,
+                          color: AppColors.primary,
                           borderRadius: BorderRadius.circular(30),
                         ),
                         child: const Text(
@@ -90,7 +90,7 @@ class ProfilePage extends StatelessWidget {
               const Text(
                 'Sai Sharan',
                 style: TextStyle(
-                  color: AppColors.white,
+                  color: AppColors.background,
                   fontSize: 34,
                   height: 0.95,
                   fontWeight: FontWeight.w900,
@@ -104,16 +104,16 @@ class ProfilePage extends StatelessWidget {
                 width: 66,
                 height: 44,
                 decoration: BoxDecoration(
-                  color: AppColors.black.withOpacity(0.2),
+                  color: AppColors.primaryDark.withOpacity(0.2),
                   borderRadius: BorderRadius.circular(42),
                   border: Border.all(
-                    color: AppColors.black.withOpacity(0.6),
+                    color: AppColors.primaryDark.withOpacity(0.6),
                     width: 1.5,
                   ),
                 ),
                 child: const Icon(
                   Icons.assistant_outlined,
-                  color: AppColors.darkRed,
+                  color: AppColors.primary,
                 ),
               ),
 
@@ -126,7 +126,7 @@ class ProfilePage extends StatelessWidget {
                   Text(
                     'NEXT LEVEL PROGRESS',
                     style: TextStyle(
-                      color: AppColors.lightGrey,
+                      color: AppColors.textSecondary,
                       fontSize: 11,
                       letterSpacing: 1.2,
                       fontWeight: FontWeight.w800,
@@ -135,7 +135,7 @@ class ProfilePage extends StatelessWidget {
                   Text(
                     '1,450 / 2,000 XP',
                     style: TextStyle(
-                      color: AppColors.white,
+                      color: AppColors.background,
                       fontSize: 12,
                       fontWeight: FontWeight.w800,
                     ),
@@ -149,7 +149,7 @@ class ProfilePage extends StatelessWidget {
               Container(
                 height: 10,
                 decoration: BoxDecoration(
-                  color: AppColors.black.withOpacity(0.3),
+                  color: AppColors.primaryDark.withOpacity(0.3),
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: FractionallySizedBox(
@@ -157,7 +157,7 @@ class ProfilePage extends StatelessWidget {
                   child: Container(
                     margin: const EdgeInsets.all(2),
                     decoration: BoxDecoration(
-                      color: AppColors.darkRed,
+                      color: AppColors.primary,
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
@@ -222,8 +222,8 @@ class _RoundIconBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     return CircleAvatar(
       radius: 20,
-      backgroundColor: AppColors.black.withOpacity(0.2),
-      child: Icon(icon, color: AppColors.white),
+      backgroundColor: AppColors.primaryDark.withOpacity(0.2),
+      child: Icon(icon, color: AppColors.primaryDark),
     );
   }
 }
@@ -239,8 +239,8 @@ class _Chip extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       decoration: BoxDecoration(
         color: isAdd
-            ? AppColors.black.withOpacity(0.3)
-            : AppColors.darkRed,
+            ? AppColors.primaryDark.withOpacity(0.3)
+            : AppColors.primary,
         borderRadius: BorderRadius.circular(24),
       ),
       child: Text(
@@ -248,7 +248,7 @@ class _Chip extends StatelessWidget {
         style: const TextStyle(
           fontSize: 11,
           fontWeight: FontWeight.w800,
-          color: AppColors.white,
+          color: AppColors.secondary,
         ),
       ),
     );
@@ -263,23 +263,23 @@ class _SettingsCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: AppColors.black.withOpacity(0.2),
+        color: AppColors.primaryDark.withOpacity(0.2),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
         children: const [
-          Icon(Icons.person_outline, color: AppColors.white),
+          Icon(Icons.person_outline, color: AppColors.secondary),
           SizedBox(width: 10),
           Expanded(
             child: Text(
               'Profile Settings',
               style: TextStyle(
-                color: AppColors.white,
+                color: AppColors.secondary,
                 fontWeight: FontWeight.w800,
               ),
             ),
           ),
-          Icon(Icons.chevron_right, color: AppColors.lightGrey),
+          Icon(Icons.chevron_right, color: AppColors.textSecondary),
         ],
       ),
     );
