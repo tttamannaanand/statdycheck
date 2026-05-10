@@ -8,7 +8,7 @@ class AppColors {
   static const primaryDark = Color(0xFF000000);
 
   // ⚪ Background / cards
-  static const background = Color(0xFFD9D9D9);
+  static const background = Color(0xFFFFFFFF);
 
   // 🔘 Secondary / borders / subtle UI
   static const secondary = Color(0xFFFFFFFF);
