@@ -4,6 +4,7 @@ import 'features/onboarding/onboarding_screen.dart';
 import 'features/auth/auth_screen.dart';
 import 'features/auth/login_screen.dart';
 import 'features/home/home_screen.dart';
+import 'features/starbuddy/starbuddy_screen.dart';
 import 'features/learn/learn_screen.dart';
 import 'features/opportunities/opportunities_screen.dart';
 import 'features/profile/profile_screen.dart';
@@ -30,6 +31,10 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/home',
       builder: (context, state) => const HomeScreen(),
+    ),
+    GoRoute(
+      path: '/starbuddy',
+      builder: (context, state) => const StarbuddyScreen(),
     ),
     GoRoute(
       path: '/learn',

@@ -166,52 +166,55 @@ class HomeScreen extends StatelessWidget {
               const SizedBox(height: 16),
 
               // StarBuddy card
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: AppColors.black,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 56,
-                      height: 56,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade800,
-                        borderRadius: BorderRadius.circular(14),
-                      ),
-                      child: const Icon(
-                        Icons.smart_toy_outlined,
-                        color: AppColors.white,
-                        size: 30,
-                      ),
-                    ),
-                    const SizedBox(width: 14),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Meet Starbuddy !!',
-                          style: GoogleFonts.mukta(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.white,
-                            letterSpacing: -0.8,
-                          ),
+              GestureDetector(
+                onTap: () => context.go('/starbuddy'),
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: AppColors.black,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 56,
+                        height: 56,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade800,
+                          borderRadius: BorderRadius.circular(14),
                         ),
-                        Text(
-                          'Your star mentor is here\ntap to chat and ask any question...',
-                          style: GoogleFonts.mukta(
-                            fontSize: 12,
-                            color: AppColors.white.withOpacity(0.6),
-                            letterSpacing: -0.8,
-                          ),
+                        child: const Icon(
+                          Icons.smart_toy_outlined,
+                          color: AppColors.white,
+                          size: 30,
                         ),
-                      ],
-                    ),
-                  ],
+                      ),
+                      const SizedBox(width: 14),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Meet Starbuddy !!',
+                            style: GoogleFonts.mukta(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.white,
+                              letterSpacing: -0.8,
+                            ),
+                          ),
+                          Text(
+                            'Your star mentor is here\ntap to chat and ask any question...',
+                            style: GoogleFonts.mukta(
+                              fontSize: 12,
+                              color: AppColors.white.withOpacity(0.6),
+                              letterSpacing: -0.8,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
 
