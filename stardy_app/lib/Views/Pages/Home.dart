@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:stardy_app/Views/screens/Video_Larning_Page.dart';
-import '../widgets/Course_Source/course_data.dart';
+import 'package:stardy_app/Views/Cources/Course_Source/Video_Larning_Page.dart';
+import '../Cources/Course_Source/course_data.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});

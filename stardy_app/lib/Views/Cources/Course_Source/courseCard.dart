@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../color_codes.dart';
+import '../../widgets/color_codes.dart';
 import 'courseModel.dart';
-import '../../screens/Course_details_page.dart';
+import '../Course_details_page.dart';
 
 class CourseCard extends StatelessWidget {
   final Course course;

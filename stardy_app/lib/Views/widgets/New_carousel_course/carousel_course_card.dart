@@ -1,97 +1,303 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import '../New_carousel_course/carousel_course_model.dart';
+
+import '../../Cources/Course_Source/courseModel.dart';
+import '../../Cources/Course_details_page.dart';
 
 class CarouselCourseCard extends StatelessWidget {
-  final CarouselCourse course;
+  final Course course;
 
   const CarouselCourseCard({super.key, required this.course});
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(20),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => CourseDetailsPage(course: course)),
+        );
+      },
+
       child: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(course.image),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Colors.black.withOpacity(0.6),
-                Colors.transparent,
-                Colors.black.withOpacity(0.7),
-              ],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            ),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // 🔥 TOP ROW
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    course.category,
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                  Text(
-                    "⭐ ${course.rating}",
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                ],
+        width: double.infinity,
+        margin: const EdgeInsets.symmetric(horizontal: 4),
+
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(26),
+
+          child: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(course.image),
+                fit: BoxFit.cover,
               ),
+            ),
 
-              const SizedBox(height: 10),
+            child: Container(
+              padding: const EdgeInsets.all(18),
 
-              // 🔥 TITLE
-              Text(
-                course.title,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+
+                  colors: [
+                    Colors.black.withOpacity(0.65),
+                    Colors.black.withOpacity(0.15),
+                    Colors.black.withOpacity(0.82),
+                  ],
                 ),
               ),
 
-              const Spacer(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
 
-              // 🔥 GLASS ICON
-              _glassIcon(),
-            ],
+                children: [
+                  // =====================================================
+                  // TOP SECTION
+                  // =====================================================
+                  Row(
+                    children: [
+                      // CATEGORY CHIP
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+
+                          child: _topChip(
+                            text: course.category,
+                            color: Colors.white.withOpacity(0.15),
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(width: 10),
+
+                      // RATING CHIP
+                      Align(
+                        alignment: Alignment.centerRight,
+
+                        child: _topChip(
+                          text: "⭐ ${course.rating}",
+                          color: Colors.orange.withOpacity(0.18),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 18),
+
+                  // =====================================================
+                  // TITLE
+                  // =====================================================
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.centerLeft,
+
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 220),
+
+                      child: Text(
+                        course.title,
+
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          height: 1.3,
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 10),
+
+                  // =====================================================
+                  // DESCRIPTION
+                  // =====================================================
+                  Flexible(
+                    child: Text(
+                      course.description,
+
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+
+                      style: const TextStyle(
+                        color: Colors.white70,
+                        fontSize: 12,
+                        height: 1.4,
+                      ),
+                    ),
+                  ),
+
+                  const Spacer(),
+
+                  // =====================================================
+                  // INFO SECTION
+                  // =====================================================
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+
+                    child: Row(
+                      children: [
+                        _infoChip(icon: Icons.schedule, text: course.duration),
+
+                        const SizedBox(width: 8),
+
+                        _infoChip(
+                          icon: Icons.calendar_month,
+                          text: course.uploadDate,
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 14),
+
+                  // =====================================================
+                  // BOTTOM ROW
+                  // =====================================================
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Row(
+                          children: [
+                            Container(
+                              height: 10,
+                              width: 10,
+
+                              decoration: const BoxDecoration(
+                                color: Colors.green,
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+
+                            const SizedBox(width: 8),
+
+                            const Expanded(
+                              child: Text(
+                                "Available Now",
+
+                                overflow: TextOverflow.ellipsis,
+
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 13,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      const SizedBox(width: 10),
+
+                      _glassButton(context),
+                    ],
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _glassIcon() {
-    return Align(
-      alignment: Alignment.bottomLeft,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(50),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
-          child: Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.1),
-              shape: BoxShape.circle,
-              border: Border.all(color: Colors.white.withOpacity(0.25)),
-            ),
-            child: const Icon(
-              Icons.arrow_outward,
-              color: Colors.white,
-              size: 20,
-            ),
+  // =====================================================
+  // TOP CHIP
+  // =====================================================
+
+  Widget _topChip({required String text, required Color color}) {
+    return IntrinsicWidth(
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+
+        decoration: BoxDecoration(
+          color: color,
+
+          borderRadius: BorderRadius.circular(30),
+
+          border: Border.all(color: Colors.white.withOpacity(0.2)),
+        ),
+
+        child: Text(
+          text,
+
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+
+          style: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+            fontSize: 12,
           ),
+        ),
+      ),
+    );
+  }
+
+  // =====================================================
+  // INFO CHIP
+  // =====================================================
+
+  Widget _infoChip({required IconData icon, required String text}) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.12),
+
+        borderRadius: BorderRadius.circular(14),
+      ),
+
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+
+        children: [
+          Icon(icon, color: Colors.white, size: 14),
+
+          const SizedBox(width: 5),
+
+          Text(
+            text,
+
+            overflow: TextOverflow.ellipsis,
+
+            style: const TextStyle(color: Colors.white, fontSize: 11),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // =====================================================
+  // GLASS BUTTON
+  // =====================================================
+
+  Widget _glassButton(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(50),
+
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+
+        child: Container(
+          padding: const EdgeInsets.all(10),
+
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.12),
+
+            shape: BoxShape.circle,
+
+            border: Border.all(color: Colors.white.withOpacity(0.22)),
+          ),
+
+          child: const Icon(Icons.arrow_outward, color: Colors.white, size: 18),
         ),
       ),
     );
