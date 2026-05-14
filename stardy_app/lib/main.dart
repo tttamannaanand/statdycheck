@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'Views/screens/splash_screen.dart';
-import 'Views/Pages/signup.dart';
+
+import './Routers/routes.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,21 +11,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      initialRoute: getInitialRoute(),
-      routes: getAppRoutes(),
+
+      // CONNECTED GOROUTER
+      routerConfig: appRouter,
+
+      title: 'Stardy AI',
     );
   }
-}
-
-String getInitialRoute() {
-  return '/';
-}
-
-Map<String, WidgetBuilder> getAppRoutes() {
-  return {
-    '/': (context) => const SplashScreen(),
-    '/login': (context) => const AuthPage(),
-  };
 }

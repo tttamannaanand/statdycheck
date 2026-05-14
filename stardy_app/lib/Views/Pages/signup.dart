@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:stardy_app/Views/widgets/NavBar.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:go_router/go_router.dart';
+import '../widgets/color_codes.dart';
 
 class AuthPage extends StatefulWidget {
   const AuthPage({super.key});
@@ -12,251 +14,371 @@ class _AuthPageState extends State<AuthPage> {
   bool _isLogin = true;
   bool _obscurePassword = true;
 
-  final _nameController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
+
+  final TextEditingController _emailController = TextEditingController();
+
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   void dispose() {
-    _nameController.dispose();
+    _usernameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
 
-  void _navigateToHome() {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const NavbarPage()),
-    );
-  }
+  Widget _buildInputField({
+    required TextEditingController controller,
+    required String hint,
+    bool obscure = false,
+    bool showToggle = false,
+    TextInputType keyboardType = TextInputType.text,
+    IconData? icon,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.background,
+        borderRadius: BorderRadius.circular(14),
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF0A0A0A),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Column(
-            children: [
-              const SizedBox(height: 50),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.07),
+            blurRadius: 16,
+            spreadRadius: 0,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
 
-              // Logo
-              CircleAvatar(
-                radius: 50,
-                backgroundColor: const Color(0xFF1A2F5E),
-                backgroundImage: const AssetImage(
-                  'assets/images/stardy-logo.png',
-                ),
-              ),
+      child: TextField(
+        controller: controller,
+        obscureText: obscure ? _obscurePassword : false,
+        keyboardType: keyboardType,
 
-              const SizedBox(height: 20),
+        style: GoogleFonts.mukta(
+          fontSize: 15,
+          color: AppColors.primaryDark,
+          letterSpacing: -0.8,
+        ),
 
-              Text(
-                _isLogin ? 'STARDY.AI' : 'Join STARDY.AI',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 26,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+        decoration: InputDecoration(
+          hintText: hint,
 
-              const SizedBox(height: 40),
+          hintStyle: GoogleFonts.mukta(
+            fontSize: 14,
+            color: Colors.grey.shade600,
+            letterSpacing: -0.8,
+          ),
 
-              // Name (Sign Up only)
-              if (!_isLogin) ...[
-                TextField(
-                  controller: _nameController,
-                  style: const TextStyle(color: Colors.white),
-                  decoration: _inputDecoration(
-                    hint: 'Full Name',
-                    icon: Icons.person_outline,
+          prefixIcon: icon != null
+              ? Icon(icon, color: Colors.grey.shade600, size: 20)
+              : null,
+
+          suffixIcon: showToggle
+              ? IconButton(
+                  icon: Icon(
+                    _obscurePassword
+                        ? Icons.visibility_off_outlined
+                        : Icons.visibility_outlined,
+                    color: Colors.grey.shade600,
+                    size: 20,
                   ),
-                ),
-                const SizedBox(height: 16),
-              ],
 
-              // Email
-              TextField(
-                controller: _emailController,
-                style: const TextStyle(color: Colors.white),
-                decoration: _inputDecoration(
-                  hint: 'Email Address',
-                  icon: Icons.email_outlined,
-                ),
-              ),
+                  onPressed: () {
+                    setState(() {
+                      _obscurePassword = !_obscurePassword;
+                    });
+                  },
+                )
+              : null,
 
-              const SizedBox(height: 16),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(14),
+            borderSide: BorderSide.none,
+          ),
 
-              // Password
-              TextField(
-                controller: _passwordController,
-                obscureText: _obscurePassword,
-                style: const TextStyle(color: Colors.white),
-                decoration: _inputDecoration(
-                  hint: 'Password',
-                  icon: Icons.lock_outline,
-                  isPassword: true,
-                ),
-              ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(14),
+            borderSide: BorderSide.none,
+          ),
 
-              const SizedBox(height: 30),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(14),
 
-              // Login / Sign Up Button (UI only)
-              SizedBox(
-                width: double.infinity,
-                height: 52,
-                child: ElevatedButton(
-                  onPressed: _navigateToHome,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFE8940A),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                  ),
-                  child: Text(
-                    _isLogin ? 'Login' : 'Sign Up',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
+            borderSide: const BorderSide(color: AppColors.primary, width: 1.2),
+          ),
 
-              const SizedBox(height: 30),
+          filled: true,
+          fillColor: AppColors.background,
 
-              // OR CONTINUE WITH
-              Row(
-                children: const [
-                  Expanded(child: Divider(color: Colors.white24)),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: Text(
-                      'OR CONTINUE WITH',
-                      style: TextStyle(color: Colors.white38, fontSize: 12),
-                    ),
-                  ),
-                  Expanded(child: Divider(color: Colors.white24)),
-                ],
-              ),
-
-              const SizedBox(height: 20),
-
-              // Social Buttons (UI only)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: const [
-                  SocialButton(
-                    icon: Icons.g_mobiledata,
-                    color: Colors.redAccent,
-                  ),
-                  SocialButton(icon: Icons.apple, color: Colors.white),
-                  SocialButton(
-                    icon: Icons.person_outline,
-                    color: Colors.blueAccent,
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 30),
-
-              // Toggle Login / Signup
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _isLogin = !_isLogin;
-                  });
-                },
-                child: RichText(
-                  text: TextSpan(
-                    text: _isLogin
-                        ? "Don't have an account? "
-                        : "Already have an account? ",
-                    style: const TextStyle(color: Colors.white54, fontSize: 13),
-                    children: [
-                      TextSpan(
-                        text: _isLogin ? 'Sign Up' : 'Login',
-                        style: const TextStyle(
-                          color: Color(0xFFE8940A),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 40),
-            ],
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 20,
+            vertical: 18,
           ),
         ),
       ),
     );
   }
 
-  InputDecoration _inputDecoration({
-    required String hint,
-    required IconData icon,
-    bool isPassword = false,
-  }) {
-    return InputDecoration(
-      hintText: hint,
-      hintStyle: const TextStyle(color: Colors.white38),
-      prefixIcon: Icon(icon, color: Colors.white38),
-      suffixIcon: isPassword
-          ? IconButton(
-              icon: Icon(
-                _obscurePassword ? Icons.visibility_off : Icons.visibility,
-                color: Colors.white38,
-              ),
-              onPressed: () {
-                setState(() {
-                  _obscurePassword = !_obscurePassword;
-                });
-              },
-            )
-          : null,
-      filled: true,
-      fillColor: const Color(0xFF1A1A1A),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: Color(0xFF2A2A2A)),
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: Color(0xFF2A2A2A)),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: Color(0xFFE8940A)),
-      ),
-    );
-  }
-}
-
-// Social Button (UI only)
-class SocialButton extends StatelessWidget {
-  final IconData icon;
-  final Color color;
-
-  const SocialButton({super.key, required this.icon, required this.color});
-
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 60,
-      height: 60,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        border: Border.all(color: Colors.white24),
-        color: const Color(0xFF1A1A1A),
-      ),
-      child: IconButton(
-        onPressed: () {},
-        icon: Icon(icon, color: color, size: 28),
+    final size = MediaQuery.of(context).size;
+
+    return Scaffold(
+      backgroundColor: const Color(0xFFCCCCCC),
+
+      body: Stack(
+        children: [
+          // BACKGROUND LOGO
+          Container(
+            height: size.height,
+
+            decoration: const BoxDecoration(color: Color(0xFFCCCCCC)),
+
+            child: Opacity(
+              opacity: 0.35,
+
+              child: Align(
+                alignment: Alignment.topCenter,
+
+                child: Padding(
+                  padding: EdgeInsets.only(top: size.height * 0.05),
+
+                  child: Image.asset(
+                    'assets/images/Group_17.png',
+                    width: size.width,
+                    height: size.height * 0.35,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            ),
+          ),
+
+          // BOTTOM CARD
+          Align(
+            alignment: Alignment.bottomCenter,
+
+            child: Container(
+              height: _isLogin ? size.height * 0.60 : size.height * 0.68,
+
+              width: double.infinity,
+
+              decoration: const BoxDecoration(
+                color: AppColors.background,
+
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(36),
+                  topRight: Radius.circular(36),
+                ),
+
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 24,
+                    offset: Offset(0, -6),
+                  ),
+                ],
+              ),
+
+              padding: const EdgeInsets.fromLTRB(24, 36, 24, 24),
+
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+
+                  children: [
+                    // TITLE
+                    Text(
+                      _isLogin ? 'Welcome Back' : 'Create Account',
+
+                      style: GoogleFonts.mukta(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.primaryDark,
+                        letterSpacing: -0.8,
+                      ),
+                    ),
+
+                    const SizedBox(height: 24),
+
+                    // USERNAME
+                    if (!_isLogin) ...[
+                      _buildInputField(
+                        controller: _usernameController,
+                        hint: 'Username',
+                        icon: Icons.person_outline,
+                      ),
+
+                      const SizedBox(height: 14),
+                    ],
+
+                    // EMAIL
+                    _buildInputField(
+                      controller: _emailController,
+                      hint: 'Email / Phone',
+                      keyboardType: TextInputType.emailAddress,
+                      icon: Icons.email_outlined,
+                    ),
+
+                    const SizedBox(height: 14),
+
+                    // PASSWORD
+                    _buildInputField(
+                      controller: _passwordController,
+                      hint: 'Password',
+                      obscure: true,
+                      showToggle: true,
+                      icon: Icons.lock_outline,
+                    ),
+
+                    const SizedBox(height: 14),
+
+                    // TOGGLE LOGIN / SIGNUP
+                    Align(
+                      alignment: Alignment.centerRight,
+
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _isLogin = !_isLogin;
+                          });
+                        },
+
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+
+                          children: [
+                            Text(
+                              _isLogin
+                                  ? "Don't have an account "
+                                  : "Already have an account ",
+
+                              style: GoogleFonts.mukta(
+                                fontSize: 13,
+                                color: AppColors.primaryDark,
+                                letterSpacing: -0.8,
+                              ),
+                            ),
+
+                            const Icon(
+                              Icons.arrow_forward,
+                              color: AppColors.primary,
+                              size: 16,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 24),
+
+                    // BUTTON
+                    // BUTTON
+                    SizedBox(
+                      width: double.infinity,
+                      height: 56,
+
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // LOGIN -> DIRECT NAVBAR
+                          if (_isLogin) {
+                            context.go('/main');
+                          }
+                          // SIGNUP -> ONBOARDING
+                          else {
+                            context.go('/onboarding');
+                          }
+                        },
+
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primaryDark,
+                          foregroundColor: AppColors.background,
+
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(32),
+                          ),
+
+                          elevation: 0,
+                        ),
+
+                        child: Text(
+                          _isLogin ? 'Login' : 'Sign Up',
+
+                          style: GoogleFonts.mukta(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: -0.8,
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 28),
+
+                    // OTHER ACCOUNT
+                    Center(
+                      child: Text(
+                        _isLogin
+                            ? 'Sign in using another account'
+                            : 'Sign up using another account',
+
+                        style: GoogleFonts.mukta(
+                          fontSize: 13,
+                          color: Colors.grey,
+                          letterSpacing: -0.8,
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 16),
+
+                    // GOOGLE BUTTON
+                    Center(
+                      child: GestureDetector(
+                        onTap: () {
+                          context.go('/home');
+                        },
+
+                        child: Container(
+                          width: 58,
+                          height: 58,
+
+                          decoration: BoxDecoration(
+                            color: AppColors.background,
+
+                            borderRadius: BorderRadius.circular(16),
+
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.08),
+
+                                blurRadius: 14,
+
+                                offset: const Offset(0, 3),
+                              ),
+                            ],
+                          ),
+
+                          child: Padding(
+                            padding: const EdgeInsets.all(12),
+
+                            child: Image.asset(
+                              'assets/images/GoogleLogo.png',
+                              width: 28,
+                              height: 28,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
