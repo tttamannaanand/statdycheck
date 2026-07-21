@@ -57,7 +57,7 @@ class _CourseDetailScreenState extends ConsumerState<CourseDetailScreen> {
                             onTap: () => context.pop(),
                             child: Container(
                               padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                 color: AppColors.surfaceLight,
                                 shape: BoxShape.circle,
                               ),
@@ -84,7 +84,7 @@ class _CourseDetailScreenState extends ConsumerState<CourseDetailScreen> {
                         children: [
                           Container(
                             padding: const EdgeInsets.all(10),
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               color: AppColors.surfaceLight,
                               shape: BoxShape.circle,
                             ),

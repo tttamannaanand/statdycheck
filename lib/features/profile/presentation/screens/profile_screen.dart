@@ -21,7 +21,7 @@ class ProfileScreen extends ConsumerWidget {
       backgroundColor: AppColors.background,
       body: profileAsync.when(
         loading: () => const Center(child: CircularProgressIndicator(color: AppColors.accentRed)),
-        error: (error, stack) => Center(
+        error: (error, stack) => const Center(
           child: Text('Something went wrong', style: TextStyle(color: AppColors.textPrimary)),
         ),
         data: (profile) => SingleChildScrollView(

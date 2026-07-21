@@ -26,12 +26,16 @@ class StreakCard extends StatelessWidget {
         alignment: Alignment.topCenter,
         children: [
           Positioned(
+            left: 0,
+            right: 0,
             top: 16,
-            child: _backgroundCard(width: 0.86, color: AppColors.surfaceMuted.withOpacity(0.6)),
+            child: _backgroundCard(width: 0.86, color: AppColors.surfaceMuted.withValues(alpha: 0.6)),
           ),
           Positioned(
+            left: 0,
+            right: 0,
             top: 8,
-            child: _backgroundCard(width: 0.93, color: AppColors.surfaceLight.withOpacity(0.8)),
+            child: _backgroundCard(width: 0.93, color: AppColors.surfaceLight.withValues(alpha: 0.8)),
           ),
           _mainCard(context),
         ],

@@ -37,7 +37,7 @@ class XpProgressSection extends StatelessWidget {
                   Text('XP', style: AppTextStyles.heading2.copyWith(color: AppColors.accentRed)),
                 ],
               ),
-              Icon(Icons.keyboard_double_arrow_right_rounded, color: AppColors.textMuted, size: 18),
+              const Icon(Icons.keyboard_double_arrow_right_rounded, color: AppColors.textMuted, size: 18),
               Row(
                 children: [
                   Text('$targetXp ', style: AppTextStyles.heading2),
