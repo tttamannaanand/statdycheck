@@ -1,3 +1,5 @@
+import '../../Cources/Course_Source/courseModel.dart';
+
 class CarouselCourse {
   final String id;
   final String title;
@@ -33,5 +35,29 @@ class CarouselCourse {
       "image": image,
       "rating": rating,
     };
+  }
+
+  Course toCourse() {
+    return Course(
+      title: title,
+      image: image,
+      rating: rating,
+      progress: 0.05,
+      category: category,
+      uploadDate: "Jan 1, 2026",
+      duration: "4h 00m",
+      description: "Learn the fundamentals of $title with this guided course.",
+      chapters: [
+        Chapter(
+          title: "Introduction",
+          topics: [
+            Topic(
+              title: "Getting Started with $title",
+              videoUrl: "https://youtu.be/dQw4w9WgXcQ",
+            ),
+          ],
+        ),
+      ],
+    );
   }
 }
