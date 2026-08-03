@@ -14,21 +14,48 @@ class _QuizPageState extends State<QuizPage> {
 
   int? selectedAnswer;
 
+  bool answeredWrong = false;
+  bool showCorrectPanel = false;
+
   int score = 0;
 
   bool showResult = false;
 
-  final List<int> userAnswers = [];
+  void selectOption(int index) {
+    if (showCorrectPanel) return;
 
-  void nextQuestion() {
-    if (selectedAnswer == null) return;
+    final question = pythonQuiz[currentQuestion];
 
-    userAnswers.add(selectedAnswer!);
+    setState(() {
+      selectedAnswer = index;
 
-    if (selectedAnswer == pythonQuiz[currentQuestion].correctAnswer) {
-      score++;
-    }
+      if (index == question.correctAnswer) {
+        answeredWrong = false;
+        showCorrectPanel = true;
+        score++;
+      } else {
+        answeredWrong = true;
+      }
+    });
+  }
 
+  void retry() {
+    setState(() {
+      selectedAnswer = null;
+      answeredWrong = false;
+    });
+  }
+
+  void showHint() {
+    final question = pythonQuiz[currentQuestion];
+    final hint = question.hint;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(hint.isEmpty ? "No hint available." : hint)),
+    );
+  }
+
+  void goToNextQuestion() {
     if (currentQuestion == pythonQuiz.length - 1) {
       setState(() {
         showResult = true;
@@ -37,6 +64,8 @@ class _QuizPageState extends State<QuizPage> {
       setState(() {
         currentQuestion++;
         selectedAnswer = null;
+        answeredWrong = false;
+        showCorrectPanel = false;
       });
     }
   }
@@ -55,18 +84,12 @@ class _QuizPageState extends State<QuizPage> {
         elevation: 0,
 
         iconTheme: const IconThemeData(color: Colors.black),
-
-        title: Text(
-          "Python Quiz",
-
-          style: GoogleFonts.mukta(color: Colors.black, fontWeight: FontWeight.bold),
-        ),
       ),
 
       body: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.symmetric(horizontal: 24),
 
-        child: _buildQuestionScreen(),
+        child: showCorrectPanel ? _buildCorrectPanel() : _buildQuestionScreen(),
       ),
     );
   }
@@ -75,41 +98,43 @@ class _QuizPageState extends State<QuizPage> {
     final question = pythonQuiz[currentQuestion];
 
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+
       children: [
-        Row(
-          children: [
-            Expanded(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: LinearProgressIndicator(
-                  value: (currentQuestion + 1) / pythonQuiz.length,
-                  minHeight: 3,
-                  backgroundColor: Colors.grey.shade300,
-                  color: Colors.red,
-                ),
+        Center(
+          child: Column(
+            children: [
+              Text(
+                "Don't worry",
+                style: GoogleFonts.mukta(fontSize: 20, color: Colors.grey.shade600),
               ),
-            ),
-
-            SizedBox(width: 20),
-
-            Text(
-              "${currentQuestion + 1}/${pythonQuiz.length}",
-              style: GoogleFonts.mukta(fontWeight: FontWeight.w500),
-            ),
-          ],
+              Text(
+                "You've got this !",
+                style: GoogleFonts.mukta(fontSize: 20, color: Colors.grey.shade600),
+              ),
+            ],
+          ),
         ),
 
-        SizedBox(height: 40),
+        SizedBox(height: 30),
 
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            question.question,
-            style: GoogleFonts.mukta(
-              fontSize: 22,
-              fontWeight: FontWeight.w600,
-              height: 1.3,
-            ),
+        _progressDashes(),
+
+        SizedBox(height: 24),
+
+        Text(
+          "Q ${(currentQuestion + 1).toString().padLeft(2, '0')}",
+          style: GoogleFonts.mukta(color: Colors.grey.shade500, fontSize: 13),
+        ),
+
+        SizedBox(height: 8),
+
+        Text(
+          question.question,
+          style: GoogleFonts.mukta(
+            fontSize: 22,
+            fontWeight: FontWeight.w600,
+            height: 1.3,
           ),
         ),
 
@@ -122,21 +147,41 @@ class _QuizPageState extends State<QuizPage> {
 
         const Spacer(),
 
-        _bottomButtons(),
+        _hintRetryBar(),
+
+        SizedBox(height: 20),
       ],
+    );
+  }
+
+  Widget _progressDashes() {
+    return Row(
+      children: List.generate(pythonQuiz.length, (index) {
+        bool filled = index <= currentQuestion;
+
+        return Expanded(
+          child: Container(
+            margin: EdgeInsets.only(
+              right: index == pythonQuiz.length - 1 ? 0 : 6,
+            ),
+            height: 6,
+            decoration: BoxDecoration(
+              color: filled ? Colors.red : Colors.grey.shade300,
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+        );
+      }),
     );
   }
 
   Widget _optionCard(int index, String option) {
     bool selected = selectedAnswer == index;
+    bool isWrongSelection = selected && answeredWrong;
 
     return InkWell(
       borderRadius: BorderRadius.circular(18),
-      onTap: () {
-        setState(() {
-          selectedAnswer = index;
-        });
-      },
+      onTap: () => selectOption(index),
       child: Container(
         margin: const EdgeInsets.only(bottom: 18),
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
@@ -144,8 +189,8 @@ class _QuizPageState extends State<QuizPage> {
           color: Colors.white,
           borderRadius: BorderRadius.circular(18),
           border: Border.all(
-            color: selected ? Colors.black : Colors.grey.shade300,
-            width: selected ? 2 : 1,
+            color: isWrongSelection ? Colors.red : Colors.grey.shade300,
+            width: isWrongSelection ? 1.6 : 1,
           ),
           boxShadow: [
             BoxShadow(
@@ -162,7 +207,7 @@ class _QuizPageState extends State<QuizPage> {
               child: Text(
                 String.fromCharCode(65 + index),
                 style: GoogleFonts.mukta(
-                  color: Colors.grey.shade500,
+                  color: isWrongSelection ? Colors.red : Colors.grey.shade500,
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
                 ),
@@ -177,85 +222,123 @@ class _QuizPageState extends State<QuizPage> {
                 style: GoogleFonts.mukta(
                   fontSize: 17,
                   fontWeight: FontWeight.w500,
+                  color: isWrongSelection ? Colors.red : Colors.black,
                 ),
               ),
             ),
 
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              height: 22,
-              width: 22,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(
-                  width: 1.8,
-                  color: selected ? Colors.black : Colors.grey,
+            if (isWrongSelection)
+              const Icon(Icons.cancel, color: Colors.red, size: 22)
+            else
+              Container(
+                height: 22,
+                width: 22,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(width: 1.8, color: Colors.grey.shade400),
                 ),
               ),
-              child: selected
-                  ? Center(
-                      child: Container(
-                        height: 10,
-                        width: 10,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.black,
-                        ),
-                      ),
-                    )
-                  : null,
-            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _bottomButtons() {
+  Widget _hintRetryBar() {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
       children: [
-        Expanded(
-          child: ElevatedButton.icon(
-            onPressed: currentQuestion == 0
-                ? null
-                : () {
-                    setState(() {
-                      currentQuestion--;
-                      selectedAnswer = null;
-                    });
-                  },
-            icon: const Icon(Icons.arrow_back, size: 18),
-            label: Text("Back"),
+        TextButton.icon(
+          onPressed: showHint,
+          icon: const Icon(Icons.lightbulb_outline, color: Colors.black, size: 18),
+          label: Text(
+            "Hint",
+            style: GoogleFonts.mukta(color: Colors.black, fontWeight: FontWeight.w600),
           ),
         ),
 
-        SizedBox(width: 16),
-
-        Container(
-          height: 52,
-          width: 52,
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.red),
-            shape: BoxShape.circle,
+        if (answeredWrong)
+          SizedBox(
+            width: 120,
+            height: 48,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.black,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(14),
+                ),
+              ),
+              onPressed: retry,
+              child: Text(
+                "Retry",
+                style: GoogleFonts.mukta(color: Colors.white, fontWeight: FontWeight.bold),
+              ),
+            ),
           ),
-          child: const Icon(Icons.bookmark_border, color: Colors.red),
+      ],
+    );
+  }
+
+  Widget _buildCorrectPanel() {
+    final question = pythonQuiz[currentQuestion];
+    final correctLetter = String.fromCharCode(65 + question.correctAnswer);
+    final correctText = question.options[question.correctAnswer];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+
+      children: [
+        SizedBox(height: 40),
+
+        Text(
+          "Correct Answer",
+          style: GoogleFonts.mukta(color: Colors.grey.shade500, fontSize: 14),
         ),
 
-        SizedBox(width: 16),
+        SizedBox(height: 8),
 
-        Expanded(
-          child: ElevatedButton.icon(
+        Text(
+          "Option $correctLetter : $correctText",
+          style: GoogleFonts.mukta(
+            color: Colors.green.shade600,
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+
+        SizedBox(height: 20),
+
+        Text(
+          question.explanation,
+          style: GoogleFonts.mukta(color: Colors.black87, fontSize: 15, height: 1.6),
+        ),
+
+        const Spacer(),
+
+        SizedBox(
+          width: double.infinity,
+          height: 54,
+          child: ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.black,
-              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
             ),
-            onPressed: nextQuestion,
-            icon: const Icon(Icons.arrow_forward, size: 18),
-            label: Text(
-              currentQuestion == pythonQuiz.length - 1 ? "Finish" : "Next",
+            onPressed: goToNextQuestion,
+            child: Text(
+              "Next",
+              style: GoogleFonts.mukta(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
             ),
           ),
         ),
+
+        SizedBox(height: 20),
       ],
     );
   }

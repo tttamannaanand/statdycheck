@@ -42,7 +42,11 @@ class _HomePageState extends State<HomePage> {
 
         children: [
           /// Progress Section
-          ProgressSection(progress: widget.course.progress),
+          ProgressSection(
+            progress: widget.course.progress,
+            downloadSize: widget.course.downloadSize,
+            assignmentsDue: widget.course.assignmentsDue,
+          ),
 
           SizedBox(height: 25),
 

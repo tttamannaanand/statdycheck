@@ -169,7 +169,7 @@ class _LearnpageState extends State<Learnpage> {
 
           boxShadow: [
             BoxShadow(
-              color: AppColors.primaryDark.withOpacity(0.5),
+              color: AppColors.primaryDark.withValues(alpha: 0.5),
               blurRadius: 12,
               offset: const Offset(0, 5),
             ),
@@ -215,11 +215,11 @@ class _LearnpageState extends State<Learnpage> {
 
         borderRadius: BorderRadius.circular(20),
 
-        border: Border.all(color: Colors.white.withOpacity(0.05)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
 
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.25),
+            color: Colors.black.withValues(alpha: 0.25),
             blurRadius: 12,
             offset: const Offset(0, 5),
           ),
@@ -419,13 +419,13 @@ class _LearnpageState extends State<Learnpage> {
 
           borderRadius: BorderRadius.circular(20),
 
-          border: Border.all(color: Colors.white.withOpacity(0.05)),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
 
           boxShadow: [
             BoxShadow(
               color: selected
-                  ? AppColors.primaryDark.withOpacity(0.6)
-                  : Colors.black.withOpacity(0.25),
+                  ? AppColors.primaryDark.withValues(alpha: 0.6)
+                  : Colors.black.withValues(alpha: 0.25),
 
               blurRadius: selected ? 14 : 8,
 

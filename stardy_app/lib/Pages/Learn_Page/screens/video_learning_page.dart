@@ -5,6 +5,7 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:stardy_app/Pages/Learn_Page/models/course_model.dart';
 import 'package:stardy_app/Core/color_codes.dart';
 import 'package:stardy_app/Pages/Learn_Page/data/video_learning_data.dart';
+import 'package:stardy_app/Pages/Learn_Page/screens/notes_page.dart';
 
 class VideoLearningPage extends StatefulWidget {
   final Course course;
@@ -23,7 +24,7 @@ class _VideoLearningPageState extends State<VideoLearningPage> {
 
   int selectedTab = 0;
 
-  final List<String> tabs = ["Transcript", "Next Videos", "Summary"];
+  final List<String> tabs = ["Transcript", "Notes", "Summary"];
 
   Set<String> completedVideos = {};
 
@@ -62,7 +63,12 @@ class _VideoLearningPageState extends State<VideoLearningPage> {
     _controller = YoutubePlayerController(
       initialVideoId: videoId,
 
-      flags: const YoutubePlayerFlags(autoPlay: true, mute: false),
+      flags: const YoutubePlayerFlags(
+        autoPlay: true,
+        mute: false,
+        hideControls: true,
+        controlsVisibleAtStart: false,
+      ),
     );
 
     _controller!.addListener(() {
@@ -71,7 +77,7 @@ class _VideoLearningPageState extends State<VideoLearningPage> {
         completedVideos.add(videoId);
       }
 
-      setState(() {});
+      if (mounted) setState(() {});
     });
 
     setState(() {
@@ -104,26 +110,20 @@ class _VideoLearningPageState extends State<VideoLearningPage> {
     }
   }
 
-  void skipForward() {
-    if (_controller == null) return;
+  int _activeTranscriptIndex() {
+    if (_controller == null) return 0;
 
-    final pos = _controller!.value.position;
+    final positionSeconds = _controller!.value.position.inSeconds;
 
-    _controller!.seekTo(pos + const Duration(seconds: 10));
-  }
+    int active = 0;
 
-  void skipBackward() {
-    if (_controller == null) return;
+    for (int i = 0; i < videoDetails.transcripts.length; i++) {
+      if (positionSeconds >= videoDetails.transcripts[i].seconds) {
+        active = i;
+      }
+    }
 
-    final pos = _controller!.value.position;
-
-    _controller!.seekTo(pos - const Duration(seconds: 10));
-  }
-
-  double getProgress() {
-    if (allVideos.isEmpty) return 0;
-
-    return completedVideos.length / allVideos.length;
+    return active;
   }
 
   @override
@@ -141,15 +141,7 @@ class _VideoLearningPageState extends State<VideoLearningPage> {
     if (_controller == null) {
       return Scaffold(
         backgroundColor: AppColors.background,
-        appBar: AppBar(
-          backgroundColor: AppColors.background,
-          iconTheme: const IconThemeData(color: Colors.black),
-          title: Text(
-            widget.course.title,
-            style: GoogleFonts.mukta(color: Colors.black),
-          ),
-        ),
-        body: Center(child: CircularProgressIndicator()),
+        body: const Center(child: CircularProgressIndicator()),
       );
     }
 
@@ -164,6 +156,10 @@ class _VideoLearningPageState extends State<VideoLearningPage> {
         key: ValueKey(currentVideoId),
         controller: _controller!,
         showVideoProgressIndicator: true,
+        progressColors: ProgressBarColors(
+          playedColor: AppColors.primary,
+          handleColor: AppColors.primary,
+        ),
       ),
       builder: (context, player) {
         return PopScope(
@@ -178,98 +174,255 @@ class _VideoLearningPageState extends State<VideoLearningPage> {
           },
           child: Scaffold(
             backgroundColor: AppColors.background,
-            appBar: AppBar(
-              backgroundColor: AppColors.background,
-              iconTheme: const IconThemeData(color: Colors.black),
-              title: Text(
-                widget.course.title,
-                style: GoogleFonts.mukta(color: Colors.black),
-              ),
-            ),
-            body: Column(
-              children: [
-                player,
+            body: SafeArea(
+              child: Column(
+                children: [
+                  Stack(
+                    alignment: Alignment.center,
 
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    IconButton(
-                      onPressed: previousVideo,
-                      icon: const Icon(Icons.skip_previous, color: Colors.black),
-                    ),
-                    IconButton(
-                      onPressed: skipBackward,
-                      icon: const Icon(Icons.replay_10, color: Colors.black),
-                    ),
-                    IconButton(
-                      onPressed: togglePlayPause,
-                      icon: Icon(
-                        _controller != null && _controller!.value.isPlaying
-                            ? Icons.pause_circle_filled
-                            : Icons.play_circle_fill,
-                        color: Colors.orange,
-                        size: 40,
+                    children: [
+                      player,
+
+                      Positioned(
+                        top: 10,
+                        left: 10,
+                        child: _circleIcon(
+                          Icons.arrow_back,
+                          onTap: () => Navigator.of(context).pop(),
+                        ),
                       ),
-                    ),
-                    IconButton(
-                      onPressed: skipForward,
-                      icon: const Icon(Icons.forward_10, color: Colors.black),
-                    ),
-                    IconButton(
-                      onPressed: nextVideo,
-                      icon: const Icon(Icons.skip_next, color: Colors.black),
-                    ),
-                  ],
-                ),
 
-                SizedBox(height: 20),
-
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: List.generate(
-                      tabs.length,
-                      (index) => GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            selectedTab = index;
-                          });
-                        },
-                        child: Column(
+                      Positioned(
+                        top: 10,
+                        right: 10,
+                        child: Row(
                           children: [
-                            Text(
-                              tabs[index],
-                              style: GoogleFonts.mukta(
-                                color: selectedTab == index
-                                    ? Colors.orange
-                                    : Colors.black,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(height: 6),
-                            Container(
-                              height: 3,
-                              width: 90,
-                              color: selectedTab == index
-                                  ? Colors.orange
-                                  : Colors.transparent,
-                            ),
+                            _circleIcon(Icons.closed_caption_outlined, onTap: () {}),
+                            SizedBox(width: 8),
+                            _circleIcon(Icons.settings_outlined, onTap: () {}),
                           ],
                         ),
                       ),
+
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+
+                        children: [
+                          _circleIcon(
+                            Icons.skip_previous_rounded,
+                            onTap: previousVideo,
+                            size: 44,
+                          ),
+
+                          SizedBox(width: 18),
+
+                          _circleIcon(
+                            _controller!.value.isPlaying
+                                ? Icons.pause_rounded
+                                : Icons.play_arrow_rounded,
+                            onTap: togglePlayPause,
+                            size: 58,
+                            filled: true,
+                          ),
+
+                          SizedBox(width: 18),
+
+                          _circleIcon(
+                            Icons.skip_next_rounded,
+                            onTap: nextVideo,
+                            size: 44,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 18, 20, 0),
+
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+
+                      children: [
+                        Text(
+                          allVideos[currentIndex]["title"] ?? widget.course.title,
+
+                          style: GoogleFonts.mukta(
+                            color: Colors.black,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+
+                        SizedBox(height: 6),
+
+                        Text(
+                          widget.course.description,
+
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+
+                          style: GoogleFonts.mukta(
+                            color: Colors.grey.shade600,
+                            fontSize: 13,
+                            height: 1.4,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ),
 
-                SizedBox(height: 20),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 18, 20, 0),
 
-                Expanded(child: _buildSelectedTab()),
-              ],
+                    child: Row(
+                      children: List.generate(tabs.length, (index) {
+                        bool selected = selectedTab == index;
+
+                        return Padding(
+                          padding: const EdgeInsets.only(right: 10),
+
+                          child: GestureDetector(
+                            onTap: () => setState(() => selectedTab = index),
+
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 18,
+                                vertical: 10,
+                              ),
+
+                              decoration: BoxDecoration(
+                                color: selected ? Colors.black : Colors.white,
+                                borderRadius: BorderRadius.circular(30),
+                                border: Border.all(
+                                  color: selected
+                                      ? Colors.black
+                                      : Colors.grey.shade300,
+                                ),
+                              ),
+
+                              child: Text(
+                                tabs[index],
+
+                                style: GoogleFonts.mukta(
+                                  color: selected ? Colors.white : Colors.black,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 13,
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      }),
+                    ),
+                  ),
+
+                  const Divider(height: 24),
+
+                  Expanded(child: _buildSelectedTab()),
+
+                  _bottomBar(),
+                ],
+              ),
             ),
           ),
         );
       },
+    );
+  }
+
+  Widget _circleIcon(
+    IconData icon, {
+    required VoidCallback onTap,
+    double size = 38,
+    bool filled = false,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+
+      child: Container(
+        height: size,
+        width: size,
+
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: filled ? Colors.white : Colors.black.withValues(alpha: 0.35),
+          border: filled ? null : Border.all(color: Colors.white, width: 1.4),
+        ),
+
+        child: Icon(
+          icon,
+          color: filled ? Colors.black : Colors.white,
+          size: size * 0.55,
+        ),
+      ),
+    );
+  }
+
+  Widget _bottomBar() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
+
+      child: Row(
+        children: [
+          Expanded(
+            child: OutlinedButton.icon(
+              style: OutlinedButton.styleFrom(
+                side: BorderSide(color: Colors.grey.shade300),
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(14),
+                ),
+              ),
+              onPressed: currentIndex == 0 ? null : previousVideo,
+              icon: const Icon(Icons.arrow_back, size: 16, color: Colors.black),
+              label: Text(
+                "Back",
+                style: GoogleFonts.mukta(color: Colors.black, fontWeight: FontWeight.w600),
+              ),
+            ),
+          ),
+
+          SizedBox(width: 12),
+
+          GestureDetector(
+            onTap: () => setState(() => selectedTab = 1),
+
+            child: Container(
+              height: 48,
+              width: 48,
+
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey.shade300),
+                borderRadius: BorderRadius.circular(14),
+              ),
+
+              child: const Icon(Icons.notes_rounded, color: Colors.black),
+            ),
+          ),
+
+          SizedBox(width: 12),
+
+          Expanded(
+            child: ElevatedButton.icon(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.black,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(14),
+                ),
+              ),
+              onPressed: currentIndex == allVideos.length - 1 ? null : nextVideo,
+              icon: const Icon(Icons.arrow_forward, size: 16),
+              label: Text(
+                "Next",
+                style: GoogleFonts.mukta(fontWeight: FontWeight.w600),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -279,7 +432,7 @@ class _VideoLearningPageState extends State<VideoLearningPage> {
         return _buildTranscriptTab();
 
       case 1:
-        return _buildNextVideosTab();
+        return const NotesPage();
 
       case 2:
         return _buildSummaryTab();
@@ -290,67 +443,59 @@ class _VideoLearningPageState extends State<VideoLearningPage> {
   }
 
   Widget _buildTranscriptTab() {
-    return ListView(
-      padding: const EdgeInsets.all(16),
-      children: videoDetails.transcripts.map((t) {
-        return _transcriptTile(
-          t.time,
-          t.title,
-          t.summary,
-          t.seconds,
-        );
-      }).toList(),
-    );
-  }
+    final activeIndex = _activeTranscriptIndex();
 
-  Widget _buildNextVideosTab() {
     return ListView.builder(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
 
-      itemCount: widget.course.chapters.length,
+      itemCount: videoDetails.transcripts.length,
 
-      itemBuilder: (context, chapterIndex) {
-        var chapter = widget.course.chapters[chapterIndex];
+      itemBuilder: (context, index) {
+        final t = videoDetails.transcripts[index];
+        final active = index == activeIndex;
 
-        return ExpansionTile(
-          collapsedIconColor: Colors.black,
+        return GestureDetector(
+          onTap: () {
+            _controller?.seekTo(Duration(seconds: t.seconds));
+            _controller?.play();
+          },
 
-          iconColor: Colors.orange,
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 20),
 
-          title: Text(
-            chapter.title,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
 
-            style: GoogleFonts.mukta(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
+              children: [
+                SizedBox(
+                  width: 52,
+
+                  child: Text(
+                    t.time,
+
+                    style: GoogleFonts.mukta(
+                      color: active ? Colors.black : Colors.grey.shade500,
+                      fontWeight: active ? FontWeight.bold : FontWeight.normal,
+                      fontSize: 13,
+                    ),
+                  ),
+                ),
+
+                Expanded(
+                  child: Text(
+                    t.summary,
+
+                    style: GoogleFonts.mukta(
+                      color: active ? Colors.black : Colors.grey.shade500,
+                      fontWeight: active ? FontWeight.w600 : FontWeight.normal,
+                      fontSize: 14,
+                      height: 1.5,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-
-          children: List.generate(chapter.topics.length, (topicIndex) {
-            var topic = chapter.topics[topicIndex];
-
-            int flatIndex = allVideos.indexWhere(
-              (video) => video["url"] == topic.videoUrl,
-            );
-
-            return ListTile(
-              leading: const Icon(Icons.play_circle_fill, color: Colors.orange),
-
-              title: Text(
-                topic.title,
-
-                style: GoogleFonts.mukta(color: Colors.black),
-              ),
-
-              onTap: () {
-                loadVideo(flatIndex);
-
-                setState(() {
-                  selectedTab = 0;
-                });
-              },
-            );
-          }),
         );
       },
     );
@@ -358,114 +503,12 @@ class _VideoLearningPageState extends State<VideoLearningPage> {
 
   Widget _buildSummaryTab() {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
 
-      child: Container(
-        padding: const EdgeInsets.all(20),
+      child: Text(
+        videoDetails.summary,
 
-        decoration: BoxDecoration(
-          color: Colors.black.withOpacity(0.08),
-
-          borderRadius: BorderRadius.circular(20),
-        ),
-
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-
-          children: [
-            Text(
-              "Video Summary",
-
-              style: GoogleFonts.mukta(
-                color: Colors.black,
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-
-            SizedBox(height: 20),
-
-            Text(
-              videoDetails.summary,
-
-              style: GoogleFonts.mukta(color: Colors.black, fontSize: 16, height: 1.7),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _transcriptTile(
-    String time,
-    String title,
-    String summary,
-    int seconds,
-  ) {
-    return GestureDetector(
-      onTap: () {
-        if (_controller != null) {
-          _controller!.seekTo(Duration(seconds: seconds));
-
-          _controller!.play();
-        }
-      },
-
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 16),
-
-        padding: const EdgeInsets.all(18),
-
-        decoration: BoxDecoration(
-          color: Colors.black.withOpacity(0.08),
-
-          borderRadius: BorderRadius.circular(20),
-        ),
-
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-
-              decoration: BoxDecoration(
-                color: Colors.orange,
-
-                borderRadius: BorderRadius.circular(8),
-              ),
-
-              child: Text(
-                time,
-
-                style: GoogleFonts.mukta(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-
-            SizedBox(height: 14),
-
-            Text(
-              title,
-
-              style: GoogleFonts.mukta(
-                color: Colors.black,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-
-            SizedBox(height: 8),
-
-            Text(
-              summary,
-
-              style: GoogleFonts.mukta(color: Colors.black, height: 1.5),
-            ),
-          ],
-        ),
+        style: GoogleFonts.mukta(color: Colors.black, fontSize: 15, height: 1.7),
       ),
     );
   }

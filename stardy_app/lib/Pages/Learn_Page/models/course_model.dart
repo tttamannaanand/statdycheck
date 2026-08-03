@@ -1,5 +1,6 @@
 class Course {
   final String title;
+  final String subtitle;
   final String image;
   final double rating;
   double progress; // make mutable
@@ -7,10 +8,13 @@ class Course {
   final String uploadDate;
   final String duration;
   final String description;
+  final String downloadSize;
+  final int assignmentsDue;
   final List<Chapter> chapters;
 
   Course({
     required this.title,
+    this.subtitle = "",
     required this.image,
     required this.rating,
     required this.progress,
@@ -18,6 +22,8 @@ class Course {
     required this.uploadDate,
     required this.duration,
     required this.description,
+    this.downloadSize = "235 MB",
+    this.assignmentsDue = 0,
     required this.chapters,
   });
 }

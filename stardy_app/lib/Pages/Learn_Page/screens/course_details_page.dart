@@ -5,6 +5,7 @@ import 'package:stardy_app/Core/color_codes.dart';
 
 import 'package:stardy_app/Pages/Learn_Page/screens/course_home_tab.dart';
 import 'package:stardy_app/Pages/Learn_Page/screens/grades_page.dart';
+import 'package:stardy_app/Pages/Learn_Page/screens/notes_page.dart';
 import 'package:stardy_app/Pages/Learn_Page/screens/resources_page.dart';
 
 class CourseDetailsPage extends StatefulWidget {
@@ -19,52 +20,105 @@ class CourseDetailsPage extends StatefulWidget {
 class _CourseDetailsPageState extends State<CourseDetailsPage> {
   int selectedTab = 0;
 
-  final List<String> tabs = ["Home", "Grades", "Resources"];
+  final List<String> tabs = ["Home", "Grades", "Notes", "Resources"];
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.secondary,
-
-      appBar: AppBar(
+    return SafeArea(
+      child: Scaffold(
         backgroundColor: AppColors.secondary,
 
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
-        ),
+        body: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
 
-        title: Text(
-          widget.course.title,
-          style: GoogleFonts.mukta(
-            color: AppColors.primaryDark,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
 
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(50),
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.arrow_back, color: Colors.black),
+                        onPressed: () => Navigator.pop(context),
+                      ),
 
-            children: List.generate(
-              tabs.length,
-              (index) => GestureDetector(
-                onTap: () {
-                  setState(() {
-                    selectedTab = index;
-                  });
-                },
+                      Row(
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.access_time, color: Colors.black),
+                            onPressed: () {},
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.more_vert, color: Colors.black),
+                            onPressed: () {},
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
 
-                child: _tab(tabs[index], selectedTab == index),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+
+                      children: [
+                        Text(
+                          widget.course.title,
+                          style: GoogleFonts.mukta(
+                            color: AppColors.primaryDark,
+                            fontSize: 26,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+
+                        if (widget.course.subtitle.isNotEmpty) ...[
+                          SizedBox(height: 4),
+                          Text(
+                            "( ${widget.course.subtitle} )",
+                            style: GoogleFonts.mukta(
+                              color: Colors.grey.shade600,
+                              fontSize: 15,
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+
+                  SizedBox(height: 8),
+                ],
               ),
             ),
-          ),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+
+              children: List.generate(
+                tabs.length,
+                (index) => GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      selectedTab = index;
+                    });
+                  },
+
+                  child: _tab(tabs[index], selectedTab == index),
+                ),
+              ),
+            ),
+
+            const Divider(height: 1),
+
+            Expanded(child: _buildPage()),
+          ],
         ),
       ),
-
-      body: _buildPage(),
     );
   }
 
@@ -77,6 +131,9 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
         return const GradesPage();
 
       case 2:
+        return const NotesPage();
+
+      case 3:
         return const ResourcesPage();
 
       default:
