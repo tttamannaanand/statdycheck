@@ -3,6 +3,7 @@ import 'package:stardy_app/Pages/Profile.dart';
 import 'package:stardy_app/Views/widgets/NavBar.dart';
 
 import '../Views/screens/splash_screen.dart';
+import '../Views/screens/error_page.dart';
 import '../Pages/signup.dart';
 import '../Views/onboarding/onboarding_screen.dart';
 
@@ -16,6 +17,18 @@ final appRouter = GoRouter(
   initialLocation: '/splash',
 
   routes: [
+    // =====================================================
+    // ERROR STATES
+    // =====================================================
+    GoRoute(
+      path: '/error-server',
+      builder: (context, state) => const ErrorPage(type: ErrorPageType.server),
+    ),
+    GoRoute(
+      path: '/error-network',
+      builder: (context, state) => const ErrorPage(type: ErrorPageType.network),
+    ),
+
     // =====================================================
     // SPLASH
     // =====================================================
