@@ -43,7 +43,7 @@ class _AuthPageState extends State<AuthPage> {
 
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.07),
+            color: Colors.black.withValues(alpha: 0.07),
             blurRadius: 16,
             spreadRadius: 0,
             offset: const Offset(0, 3),
@@ -352,7 +352,7 @@ class _AuthPageState extends State<AuthPage> {
 
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.08),
+                                color: Colors.black.withValues(alpha: 0.08),
 
                                 blurRadius: 14,
 

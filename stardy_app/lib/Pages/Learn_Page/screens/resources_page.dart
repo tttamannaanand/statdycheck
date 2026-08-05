@@ -90,7 +90,7 @@ class NotesTab extends StatelessWidget {
 
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.06),
+              color: Colors.black.withValues(alpha: 0.06),
 
               blurRadius: 10,
 
@@ -106,7 +106,7 @@ class NotesTab extends StatelessWidget {
               width: 65,
 
               decoration: BoxDecoration(
-                color: Colors.blue.withOpacity(0.1),
+                color: Colors.blue.withValues(alpha: 0.1),
 
                 borderRadius: BorderRadius.circular(18),
               ),
@@ -254,7 +254,7 @@ class ReferenceTab extends StatelessWidget {
 
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.06),
+              color: Colors.black.withValues(alpha: 0.06),
 
               blurRadius: 10,
 
@@ -270,7 +270,7 @@ class ReferenceTab extends StatelessWidget {
               width: 65,
 
               decoration: BoxDecoration(
-                color: Colors.orange.withOpacity(0.1),
+                color: Colors.orange.withValues(alpha: 0.1),
 
                 borderRadius: BorderRadius.circular(18),
               ),

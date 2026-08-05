@@ -262,7 +262,7 @@ class StarBuddyPage extends StatelessWidget {
       height: 42,
 
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.7),
+        color: Colors.white.withValues(alpha: 0.7),
         shape: BoxShape.circle,
       ),
 
