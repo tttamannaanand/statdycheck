@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:go_router/go_router.dart';
+import '../widgets/chatbot_fab.dart';
 import '../widgets/color_codes.dart';
 
 class StarbuddyScreen extends StatefulWidget {
@@ -33,6 +32,19 @@ class _StarbuddyScreenState extends State<StarbuddyScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    chatbotFabVisible.value = false;
+  }
+
+  @override
+  void dispose() {
+    chatbotFabVisible.value = true;
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -55,10 +67,11 @@ class _StarbuddyScreenState extends State<StarbuddyScreen> {
                           color: AppColors.primary,
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(
-                          Icons.smart_toy_outlined,
-                          color: AppColors.background,
-                          size: 20,
+                        child: ClipOval(
+                          child: Image.asset(
+                            'assets/images/starbuddy_avatar.png',
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                       const SizedBox(width: 8),
@@ -75,7 +88,7 @@ class _StarbuddyScreenState extends State<StarbuddyScreen> {
                           children: [
                             Text(
                               'Get Pro ',
-                              style: GoogleFonts.mukta(
+                              style: TextStyle(
                                 fontSize: 13,
                                 fontWeight: FontWeight.bold,
                                 color: AppColors.primaryDark,
@@ -143,7 +156,7 @@ class _StarbuddyScreenState extends State<StarbuddyScreen> {
                           ),
                           child: Text(
                             'What can I help you with ?',
-                            style: GoogleFonts.mukta(
+                            style: TextStyle(
                               fontSize: 15,
                               color: AppColors.background,
                             ),
@@ -158,10 +171,11 @@ class _StarbuddyScreenState extends State<StarbuddyScreen> {
                           color: AppColors.primaryDark,
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(
-                          Icons.smart_toy_outlined,
-                          color: AppColors.background,
-                          size: 16,
+                        child: ClipOval(
+                          child: Image.asset(
+                            'assets/images/starbuddy_avatar.png',
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                     ],
@@ -184,11 +198,10 @@ class _StarbuddyScreenState extends State<StarbuddyScreen> {
                               shape: BoxShape.circle,
                               color: Colors.grey.shade300,
                             ),
-                            child: ClipOval(
-                              child: Image.asset(
-                                'assets/images/Group_17.png',
-                                fit: BoxFit.cover,
-                              ),
+                            child: const Icon(
+                              Icons.person,
+                              color: Colors.white,
+                              size: 18,
                             ),
                           ),
                           const SizedBox(width: 8),
@@ -204,7 +217,7 @@ class _StarbuddyScreenState extends State<StarbuddyScreen> {
                               ),
                               child: Text(
                                 msg['text']!,
-                                style: GoogleFonts.mukta(
+                                style: TextStyle(
                                   fontSize: 14,
                                   color: AppColors.primaryDark,
                                 ),
@@ -237,7 +250,7 @@ class _StarbuddyScreenState extends State<StarbuddyScreen> {
                               border: Border.all(color: Colors.grey.shade300),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black.withOpacity(0.05),
+                                  color: Colors.black.withValues(alpha: 0.05),
                                   blurRadius: 6,
                                   offset: const Offset(0, 2),
                                 ),
@@ -254,7 +267,7 @@ class _StarbuddyScreenState extends State<StarbuddyScreen> {
                                 const SizedBox(width: 8),
                                 Text(
                                   s['label'],
-                                  style: GoogleFonts.mukta(
+                                  style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w500,
                                     color: AppColors.primaryDark,
@@ -284,13 +297,13 @@ class _StarbuddyScreenState extends State<StarbuddyScreen> {
                   Expanded(
                     child: TextField(
                       controller: _controller,
-                      style: GoogleFonts.mukta(
+                      style: TextStyle(
                         color: AppColors.background,
                         fontSize: 14,
                       ),
                       decoration: InputDecoration(
                         hintText: 'Ask Starbuddy',
-                        hintStyle: GoogleFonts.mukta(
+                        hintStyle: TextStyle(
                           color: Colors.grey.shade500,
                           fontSize: 14,
                         ),

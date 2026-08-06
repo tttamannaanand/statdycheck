@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../widgets/color_codes.dart';
+import 'quiz_page.dart';
 
 class AssignmentPage extends StatelessWidget {
   final String title;
@@ -53,7 +55,7 @@ class AssignmentPage extends StatelessWidget {
 
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.06),
+                    color: Colors.black.withValues(alpha: 0.06),
 
                     blurRadius: 10,
 
@@ -90,7 +92,7 @@ class AssignmentPage extends StatelessWidget {
                     children: [
                       _statusChip(
                         "Pending Review",
-                        Colors.orange,
+                        AppColors.primary,
                         Icons.access_time,
                       ),
                     ],
@@ -143,14 +145,14 @@ class AssignmentPage extends StatelessWidget {
                     padding: const EdgeInsets.all(16),
 
                     decoration: BoxDecoration(
-                      color: Colors.orange.withOpacity(0.1),
+                      color: AppColors.primary.withValues(alpha: 0.1),
 
                       borderRadius: BorderRadius.circular(16),
                     ),
 
                     child: Row(
                       children: [
-                        const Icon(Icons.calendar_month, color: Colors.orange),
+                        const Icon(Icons.calendar_month, color: AppColors.primary),
 
                         const SizedBox(width: 12),
 
@@ -190,7 +192,7 @@ class AssignmentPage extends StatelessWidget {
                     padding: const EdgeInsets.all(16),
 
                     decoration: BoxDecoration(
-                      color: Colors.blue.withOpacity(0.08),
+                      color: Colors.blue.withValues(alpha: 0.08),
 
                       borderRadius: BorderRadius.circular(16),
                     ),
@@ -246,30 +248,77 @@ class AssignmentPage extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(16),
 
-          child: SizedBox(
-            height: 55,
+          child: Row(
+            children: [
+              Expanded(
+                child: SizedBox(
+                  height: 55,
 
-            child: ElevatedButton(
-              onPressed: () {},
+                  child: OutlinedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => QuizPage(title: title),
+                        ),
+                      );
+                    },
 
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.black,
+                    style: OutlinedButton.styleFrom(
+                      side: const BorderSide(color: AppColors.primary),
 
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                    ),
+
+                    child: const FittedBox(
+                      child: Text(
+                        "Take Quiz",
+
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.primary,
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ),
 
-              child: const Text(
-                "Submit Assignment",
+              const SizedBox(width: 12),
 
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+              Expanded(
+                child: SizedBox(
+                  height: 55,
+
+                  child: ElevatedButton(
+                    onPressed: () {},
+
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.black,
+
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                    ),
+
+                    child: const FittedBox(
+                      child: Text(
+                        "Submit Assignment",
+
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ),
-            ),
+            ],
           ),
         ),
       ),
@@ -285,7 +334,7 @@ class AssignmentPage extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
 
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
 
         borderRadius: BorderRadius.circular(12),
       ),

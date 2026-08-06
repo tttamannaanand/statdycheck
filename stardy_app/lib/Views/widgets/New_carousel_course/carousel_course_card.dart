@@ -1,8 +1,9 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 
-import '../../Cources/Course_Source/courseModel.dart';
-import '../../Cources/Course_details_page.dart';
+import '../../Courses/Course_Source/courseModel.dart';
+import '../../Courses/Course_details_page.dart';
+import '../color_codes.dart';
 
 class CarouselCourseCard extends StatelessWidget {
   final Course course;
@@ -28,10 +29,13 @@ class CarouselCourseCard extends StatelessWidget {
 
           child: Container(
             decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(course.image),
-                fit: BoxFit.cover,
-              ),
+              color: AppColors.primaryDark,
+              image: course.image.contains('Group_17')
+                  ? null
+                  : DecorationImage(
+                      image: AssetImage(course.image),
+                      fit: BoxFit.cover,
+                    ),
             ),
 
             child: Container(
@@ -43,9 +47,9 @@ class CarouselCourseCard extends StatelessWidget {
                   end: Alignment.bottomCenter,
 
                   colors: [
-                    Colors.black.withOpacity(0.65),
-                    Colors.black.withOpacity(0.15),
-                    Colors.black.withOpacity(0.82),
+                    Colors.black.withValues(alpha: 0.65),
+                    Colors.black.withValues(alpha: 0.15),
+                    Colors.black.withValues(alpha: 0.82),
                   ],
                 ),
               ),
@@ -66,7 +70,7 @@ class CarouselCourseCard extends StatelessWidget {
 
                           child: _topChip(
                             text: course.category,
-                            color: Colors.white.withOpacity(0.15),
+                            color: Colors.white.withValues(alpha: 0.15),
                           ),
                         ),
                       ),
@@ -79,7 +83,7 @@ class CarouselCourseCard extends StatelessWidget {
 
                         child: _topChip(
                           text: "⭐ ${course.rating}",
-                          color: Colors.orange.withOpacity(0.18),
+                          color: AppColors.primary.withValues(alpha: 0.4),
                         ),
                       ),
                     ],
@@ -222,7 +226,7 @@ class CarouselCourseCard extends StatelessWidget {
 
           borderRadius: BorderRadius.circular(30),
 
-          border: Border.all(color: Colors.white.withOpacity(0.2)),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
         ),
 
         child: Text(
@@ -250,7 +254,7 @@ class CarouselCourseCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
 
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.12),
+        color: Colors.white.withValues(alpha: 0.12),
 
         borderRadius: BorderRadius.circular(14),
       ),
@@ -290,11 +294,11 @@ class CarouselCourseCard extends StatelessWidget {
           padding: const EdgeInsets.all(10),
 
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.12),
+            color: Colors.white.withValues(alpha: 0.12),
 
             shape: BoxShape.circle,
 
-            border: Border.all(color: Colors.white.withOpacity(0.22)),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.22)),
           ),
 
           child: const Icon(Icons.arrow_outward, color: Colors.white, size: 18),

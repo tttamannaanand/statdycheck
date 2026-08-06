@@ -25,7 +25,7 @@ class CourseCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.25),
+              color: Colors.black.withValues(alpha: 0.25),
               blurRadius: 10,
               spreadRadius: 1,
               offset: const Offset(0, 6),
@@ -37,12 +37,22 @@ class CourseCard extends StatelessWidget {
             // ───────── IMAGE ─────────
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              child: Image.asset(
-                course.image,
-                height: 90,
-                width: 90,
-                fit: BoxFit.cover,
-              ),
+              child: course.image.contains('Group_17')
+                  ? Container(
+                      height: 90,
+                      width: 90,
+                      color: AppColors.primary.withValues(alpha: 0.1),
+                      child: const Icon(
+                        Icons.menu_book_outlined,
+                        color: AppColors.primary,
+                      ),
+                    )
+                  : Image.asset(
+                      course.image,
+                      height: 90,
+                      width: 90,
+                      fit: BoxFit.cover,
+                    ),
             ),
 
             const SizedBox(width: 12),

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:stardy_app/Views/Pages/Home.dart';
 import 'package:stardy_app/Views/Pages/Learn_page.dart';
 import 'package:stardy_app/Views/Pages/Opportunity_page.dart';
+import 'package:stardy_app/Views/Pages/Profile.dart';
+import '../widgets/chatbot_fab.dart';
 import '../widgets/glass_navbar.dart';
 
 class NavbarPage extends StatefulWidget {
@@ -18,6 +20,7 @@ class _NavbarPageState extends State<NavbarPage> {
     HomePage(),
     Learnpage(),
     OpportunitiesPage(),
+    ProfilePage(),
   ];
 
   void _onTap(int index) {
@@ -30,6 +33,8 @@ class _NavbarPageState extends State<NavbarPage> {
       body: Stack(
         children: [
           _pages[_currentIndex],
+
+          const StarbuddyFabButton(),
 
           GlassNavbar(currentIndex: _currentIndex, onTap: _onTap),
         ],

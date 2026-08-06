@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:stardy_app/Views/Cources/Course_Source/courseModel.dart';
+import 'package:stardy_app/Views/Courses/Course_Source/courseModel.dart';
 import 'package:stardy_app/Views/widgets/color_codes.dart';
 
-import '../Cources/Course_SUB_Pages/ home_page.dart';
-import '../Cources/Course_SUB_Pages/grades_page.dart';
-import '../Cources/Course_SUB_Pages/resources_page.dart';
+import 'Course_SUB_Pages/ home_page.dart';
+import 'Course_SUB_Pages/grades_page.dart';
+import 'Course_SUB_Pages/notes_page.dart';
+import 'Course_SUB_Pages/resources_page.dart';
 
 class CourseDetailsPage extends StatefulWidget {
   final Course course;
@@ -18,7 +19,7 @@ class CourseDetailsPage extends StatefulWidget {
 class _CourseDetailsPageState extends State<CourseDetailsPage> {
   int selectedTab = 0;
 
-  final List<String> tabs = ["Home", "Grades", "Resources"];
+  final List<String> tabs = ["Home", "Grades", "Notes", "Resources"];
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +41,13 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
             fontWeight: FontWeight.bold,
           ),
         ),
+
+        actions: const [
+          Icon(Icons.access_time, color: Colors.black),
+          SizedBox(width: 16),
+          Icon(Icons.more_vert, color: Colors.black),
+          SizedBox(width: 8),
+        ],
 
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(50),
@@ -76,6 +84,9 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
         return const GradesPage();
 
       case 2:
+        return const NotesPage();
+
+      case 3:
         return const ResourcesPage();
 
       default:

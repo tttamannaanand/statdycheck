@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:go_router/go_router.dart';
 import '../widgets/color_codes.dart';
 
@@ -88,7 +87,7 @@ class _SplashScreenState extends State<SplashScreen>
     // Step 5: Navigate
     await Future.delayed(const Duration(milliseconds: 2500));
     if (mounted) {
-      context.go('/auth');
+      context.go('/onboarding');
     }
   }
 
@@ -154,7 +153,7 @@ class _SplashScreenState extends State<SplashScreen>
                       child: Text(
                         'Get Skilled Get\nStardy AI',
                         textAlign: TextAlign.center,
-                        style: GoogleFonts.mukta(
+                        style: TextStyle(
                           fontSize: 28,
                           fontWeight: FontWeight.bold,
                           letterSpacing: -0.8,
@@ -182,10 +181,10 @@ class _SplashScreenState extends State<SplashScreen>
                           ),
                           Text(
                             'Swipe Up to Enter',
-                            style: GoogleFonts.mukta(
+                            style: TextStyle(
                               fontSize: 12,
                               letterSpacing: -0.8,
-                              color: AppColors.primaryDark.withOpacity(0.9),
+                              color: AppColors.primaryDark.withValues(alpha: 0.9),
                             ),
                           ),
                         ],
@@ -206,7 +205,7 @@ class _SplashScreenState extends State<SplashScreen>
                         height: size.width * 0.8,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: Colors.grey.withOpacity(0.12),
+                          color: Colors.grey.withValues(alpha: 0.12),
                         ),
                       ),
                     ),
@@ -224,7 +223,7 @@ class _SplashScreenState extends State<SplashScreen>
                         height: currentSize,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: Colors.grey.withOpacity(0.15),
+                          color: Colors.grey.withValues(alpha: 0.15),
                         ),
                       ),
                     ),
@@ -247,7 +246,7 @@ class _SplashScreenState extends State<SplashScreen>
                                 height: smallSize,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: Colors.grey.withOpacity(0.12),
+                                  color: Colors.grey.withValues(alpha: 0.12),
                                 ),
                               ),
                               Container(
@@ -271,7 +270,7 @@ class _SplashScreenState extends State<SplashScreen>
                           const SizedBox(height: 14),
                           Text(
                             'Stardy .AI',
-                            style: GoogleFonts.mukta(
+                            style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
                               letterSpacing: -0.8,

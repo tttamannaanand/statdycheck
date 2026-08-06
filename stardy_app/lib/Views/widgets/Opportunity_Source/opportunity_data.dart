@@ -7,7 +7,7 @@ final List<Opportunity> internships = [
     location: "Remote",
     type: "PAID INTERNSHIP",
     category: "TECH",
-    image: 'assets/images/stardy-logo.png',
+    image: 'assets/images/banner_software_engineering.png',
   ),
   Opportunity(
     title: "Backend Developer Intern",
@@ -22,6 +22,7 @@ final List<Opportunity> internships = [
     location: "Remote",
     type: "PAID INTERNSHIP",
     category: "DESIGN",
+    image: 'assets/images/opportunity_meeting_room.png',
   ),
 ];
 
@@ -39,5 +40,6 @@ final List<Opportunity> projects = [
     location: "Remote",
     type: "PROJECT",
     category: "DESIGN",
+    image: 'assets/images/opportunity_design_review.png',
   ),
 ];

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'courseModel.dart';
 import '../../widgets/color_codes.dart';
+import '../Course_SUB_Pages/quiz_page.dart';
 
 class VideoLearningPage extends StatefulWidget {
   final Course course;
@@ -160,6 +161,21 @@ class _VideoLearningPageState extends State<VideoLearningPage> {
 
           style: const TextStyle(color: Colors.black),
         ),
+
+        actions: [
+          IconButton(
+            tooltip: 'Take Quiz',
+            icon: const Icon(Icons.quiz_outlined, color: Colors.black),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => QuizPage(title: widget.course.title),
+                ),
+              );
+            },
+          ),
+        ],
       ),
 
       body: Column(
@@ -203,7 +219,7 @@ class _VideoLearningPageState extends State<VideoLearningPage> {
                       ? Icons.pause_circle_filled
                       : Icons.play_circle_fill,
 
-                  color: Colors.orange,
+                  color: AppColors.primary,
                   size: 40,
                 ),
               ),
@@ -249,7 +265,7 @@ class _VideoLearningPageState extends State<VideoLearningPage> {
 
                         style: TextStyle(
                           color: selectedTab == index
-                              ? Colors.orange
+                              ? AppColors.primary
                               : Colors.black,
 
                           fontWeight: FontWeight.bold,
@@ -263,7 +279,7 @@ class _VideoLearningPageState extends State<VideoLearningPage> {
                         width: 90,
 
                         color: selectedTab == index
-                            ? Colors.orange
+                            ? AppColors.primary
                             : Colors.transparent,
                       ),
                     ],
@@ -360,7 +376,7 @@ class _VideoLearningPageState extends State<VideoLearningPage> {
         return ExpansionTile(
           collapsedIconColor: Colors.black,
 
-          iconColor: Colors.orange,
+          iconColor: AppColors.primary,
 
           title: Text(
             chapter.title,
@@ -379,7 +395,7 @@ class _VideoLearningPageState extends State<VideoLearningPage> {
             );
 
             return ListTile(
-              leading: const Icon(Icons.play_circle_fill, color: Colors.orange),
+              leading: const Icon(Icons.play_circle_fill, color: AppColors.primary),
 
               title: Text(
                 topic.title,
@@ -413,7 +429,7 @@ class _VideoLearningPageState extends State<VideoLearningPage> {
         padding: const EdgeInsets.all(20),
 
         decoration: BoxDecoration(
-          color: Colors.black.withOpacity(0.08),
+          color: Colors.black.withValues(alpha: 0.08),
 
           borderRadius: BorderRadius.circular(20),
         ),
@@ -470,7 +486,7 @@ class _VideoLearningPageState extends State<VideoLearningPage> {
         padding: const EdgeInsets.all(18),
 
         decoration: BoxDecoration(
-          color: Colors.black.withOpacity(0.08),
+          color: Colors.black.withValues(alpha: 0.08),
 
           borderRadius: BorderRadius.circular(20),
         ),
@@ -483,7 +499,7 @@ class _VideoLearningPageState extends State<VideoLearningPage> {
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
 
               decoration: BoxDecoration(
-                color: Colors.orange,
+                color: AppColors.primary,
 
                 borderRadius: BorderRadius.circular(8),
               ),
@@ -492,7 +508,7 @@ class _VideoLearningPageState extends State<VideoLearningPage> {
                 time,
 
                 style: const TextStyle(
-                  color: Colors.black,
+                  color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
               ),

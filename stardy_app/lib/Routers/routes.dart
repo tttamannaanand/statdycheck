@@ -2,6 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:stardy_app/Views/widgets/NavBar.dart';
 
 import '../Views/screens/splash_screen.dart';
+import '../Views/screens/error_screen.dart';
 import '../Views/Pages/signup.dart';
 import '../Views/onboarding/onboarding_screen.dart';
 
@@ -24,4 +25,6 @@ final appRouter = GoRouter(
     // MAIN NAVBAR APP
     GoRoute(path: '/main', builder: (context, state) => const NavbarPage()),
   ],
+
+  errorBuilder: (context, state) => const ErrorScreen(),
 );

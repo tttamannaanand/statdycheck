@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:stardy_app/Views/Cources/Course_Source/Video_Larning_Page.dart';
-import '../Cources/Course_Source/course_data.dart';
+import '../Courses/Course_Source/course_data.dart';
+import '../Courses/Course_details_page.dart';
+import '../widgets/New_carousel_course/carousel_course_card.dart';
+import '../starbuddy/starbuddy_screen.dart';
+import '../widgets/color_codes.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -8,19 +11,26 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF060f1e),
+      backgroundColor: AppColors.background,
       body: SafeArea(
-        top: false,
         child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildHeader(),
-              _buildStatsSection(),
-              _buildProgressSection(),
-              _buildDailyGoal(),
-              _buildContinueLearning(context),
+              const SizedBox(height: 10),
+              _buildTopBar(),
               const SizedBox(height: 20),
+              _buildGreeting(),
+              const SizedBox(height: 16),
+              _buildSearchBar(),
+              const SizedBox(height: 24),
+              _buildRecommendedSection(context),
+              const SizedBox(height: 16),
+              _buildStarbuddyCard(context),
+              const SizedBox(height: 24),
+              _buildNewCoursesSection(),
+              const SizedBox(height: 100),
             ],
           ),
         ),
@@ -28,327 +38,247 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  // ───────────────── HEADER ─────────────────
-  Widget _buildHeader() {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(20, 60, 17, 50),
-      decoration: const BoxDecoration(
-        color: Color(0xFF09254a),
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(30),
-          bottomRight: Radius.circular(30),
-        ),
+  // ───────────────── TOP BAR ─────────────────
+  Widget _buildTopBar() {
+    return const Align(
+      alignment: Alignment.centerLeft,
+      child: Icon(Icons.notifications_none, color: AppColors.primaryDark),
+    );
+  }
+
+  // ───────────────── GREETING ─────────────────
+  Widget _buildGreeting() {
+    return const Text(
+      'Hi Sai',
+      style: TextStyle(
+        color: AppColors.textPrimary,
+        fontSize: 24,
+        fontWeight: FontWeight.bold,
       ),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                'STARDY.AI',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 1.5,
-                ),
-              ),
-              const CircleAvatar(
-                radius: 16,
-                backgroundImage: AssetImage('assets/images/stardy-logo.png'),
-              ),
-            ],
+    );
+  }
+
+  // ───────────────── SEARCH BAR ─────────────────
+  Widget _buildSearchBar() {
+    return Container(
+      height: 50,
+      padding: const EdgeInsets.symmetric(horizontal: 15),
+      decoration: BoxDecoration(
+        color: AppColors.secondary,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: Colors.black.withValues(alpha: 0.05)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.08),
+            blurRadius: 12,
+            offset: const Offset(0, 5),
           ),
-          const SizedBox(height: 20),
-          Row(
-            children: [
-              Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  Container(
-                    width: 56,
-                    height: 56,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: const Color(0xFFf89820),
-                        width: 2,
-                      ),
-                      color: const Color(0xFF1a2a3a),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        'S',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: -4,
-                    right: -4,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 6,
-                        vertical: 2,
-                      ),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFf89820),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: const Text(
-                        'LV.15',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 9,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+        ],
+      ),
+      child: const Row(
+        children: [
+          Icon(Icons.search, color: AppColors.textSecondary),
+          SizedBox(width: 10),
+          Text('Search', style: TextStyle(color: AppColors.textSecondary)),
+        ],
+      ),
+    );
+  }
+
+  // ───────────────── RECOMMENDED FOR YOU ─────────────────
+  Widget _buildRecommendedSection(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Recommended for You',
+          style: TextStyle(
+            color: AppColors.textPrimary,
+            fontSize: 17,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 12),
+        GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => CourseDetailsPage(course: courses[0]),
               ),
-              const SizedBox(width: 16),
-              const Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Welcome back!',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      'Sai , ready to level up?',
-                      style: TextStyle(color: Color(0xFFf89820), fontSize: 13),
-                    ),
+            );
+          },
+          child: Container(
+            width: double.infinity,
+            height: 190,
+            clipBehavior: Clip.antiAlias,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(24),
+              image: const DecorationImage(
+                image: AssetImage(
+                  'assets/images/banner_software_engineering.png',
+                ),
+                fit: BoxFit.cover,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.15),
+                  blurRadius: 16,
+                  offset: const Offset(0, 6),
+                ),
+              ],
+            ),
+            child: Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.black.withValues(alpha: 0.15),
+                    Colors.black.withValues(alpha: 0.75),
                   ],
                 ),
               ),
-              Container(
-                width: 46,
-                height: 46,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.white.withOpacity(0.1),
-                ),
-                child: const Icon(
-                  Icons.notifications_outlined,
-                  color: Colors.white,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  // ───────────────── STATS ─────────────────
-  Widget _buildStatsSection() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Transform.translate(
-        offset: const Offset(0, -30),
-        child: Row(
-          children: [
-            Expanded(
-              child: _statCard(icon: Icons.star, label: 'XP', value: '3,000'),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: _statCard(
-                icon: Icons.local_fire_department,
-                label: 'Streak',
-                value: '5 Days',
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _statCard({
-    required IconData icon,
-    required String label,
-    required String value,
-  }) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: const Color(0xFF0d1f35),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Column(
-        children: [
-          Icon(icon, color: const Color(0xFFf89820)),
-          const SizedBox(height: 6),
-          Text(
-            label,
-            style: const TextStyle(color: Color(0xFFbbbbbb), fontSize: 11),
-          ),
-          Text(
-            value,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // ───────────────── PROGRESS ─────────────────
-  Widget _buildProgressSection() {
-    return const Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Current Level: 12',
-            style: TextStyle(color: Colors.white, fontSize: 16),
-          ),
-          SizedBox(height: 10),
-          LinearProgressIndicator(
-            value: 0.62,
-            backgroundColor: Color(0xFF0d1f35),
-            color: Color(0xFFf89820),
-            minHeight: 10,
-          ),
-        ],
-      ),
-    );
-  }
-
-  // ───────────────── DAILY GOAL ─────────────────
-  Widget _buildDailyGoal() {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Container(
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: const Color(0xFF09254a),
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: const Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'DAILY GOAL',
-              style: TextStyle(
-                color: Color(0xFFf89820),
-                fontSize: 10,
-                letterSpacing: 2,
-              ),
-            ),
-            SizedBox(height: 10),
-            Text(
-              'Complete 1 Lesson',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // ───────────────── CONTINUE LEARNING ─────────────────
-  Widget _buildContinueLearning(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Continue Learning',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 17,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 12),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => VideoLearningPage(course: courses[0]),
-                ),
-              );
-            },
-            child: Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: const Color(0xFF0d1f35),
-                borderRadius: BorderRadius.circular(18),
-              ),
-              child: Row(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  const Text(
+                    'Software Engineering',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    'Master full-stack development with AI\nguided projects',
+                    style: TextStyle(color: Colors.white70, fontSize: 13),
+                  ),
+                  const Spacer(),
                   Container(
-                    width: 52,
-                    height: 52,
+                    width: 44,
+                    height: 44,
                     decoration: BoxDecoration(
-                      color: const Color(0xFF1a2a3a),
-                      borderRadius: BorderRadius.circular(14),
+                      color: Colors.white.withValues(alpha: 0.15),
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Colors.white.withValues(alpha: 0.3),
+                      ),
                     ),
                     child: const Icon(
-                      Icons.code,
-                      color: Color(0xFFf89820),
-                      size: 26,
+                      Icons.arrow_outward,
+                      color: Colors.white,
+                      size: 20,
                     ),
-                  ),
-                  const SizedBox(width: 14),
-                  const Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Advanced React UI Patterns',
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 4),
-                        Text(
-                          'Tech Skill • 12 Lessons left',
-                          style: TextStyle(
-                            color: Color(0xFFbbbbbb),
-                            fontSize: 11,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const Icon(
-                    Icons.arrow_forward_ios,
-                    color: Color(0xFFf89820),
-                    size: 14,
                   ),
                 ],
               ),
             ),
           ),
-        ],
+        ),
+      ],
+    );
+  }
+
+  // ───────────────── MEET STARBUDDY ─────────────────
+  Widget _buildStarbuddyCard(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const StarbuddyScreen()),
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: AppColors.secondary,
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: Colors.black.withValues(alpha: 0.05)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.08),
+              blurRadius: 12,
+              offset: const Offset(0, 5),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 48,
+              height: 48,
+              decoration: const BoxDecoration(
+                color: AppColors.primaryDark,
+                shape: BoxShape.circle,
+              ),
+              child: ClipOval(
+                child: Image.asset(
+                  'assets/images/starbuddy_avatar.png',
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            const SizedBox(width: 14),
+            const Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Meet Starbuddy !!',
+                    style: TextStyle(
+                      color: AppColors.textPrimary,
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 2),
+                  Text(
+                    'Your star mentor is here\ntap to chat and ask any question ...',
+                    style: TextStyle(
+                      color: AppColors.textSecondary,
+                      fontSize: 11,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
+    );
+  }
+
+  // ───────────────── NEW COURSES ─────────────────
+  Widget _buildNewCoursesSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'New Courses',
+          style: TextStyle(
+            color: AppColors.textPrimary,
+            fontSize: 17,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 12),
+        SizedBox(
+          height: 270,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: courses.length,
+            itemBuilder: (context, index) {
+              return SizedBox(
+                width: MediaQuery.of(context).size.width * 0.75,
+                child: CarouselCourseCard(course: courses[index]),
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 }

@@ -3,8 +3,30 @@ import 'courseModel.dart';
 final List<Course> courses = [
   /// ---------------- BEGINNER ----------------
   Course(
+    title: "Graphic Design",
+    image: "assets/images/course_graphic_design.png",
+    rating: 5.0,
+    progress: 0.0,
+    category: "Beginner",
+    uploadDate: "Feb 22, 2026",
+    duration: "6h 00m",
+    description: "Craft compelling visual designs for print and digital.",
+    chapters: [
+      Chapter(
+        title: "Design Fundamentals",
+        topics: [
+          Topic(
+            title: "Layout & Composition",
+            videoUrl: "https://youtu.be/Uo1kAtdiVoM",
+          ),
+        ],
+      ),
+    ],
+  ),
+
+  Course(
     title: "Mastering Python",
-    image: "assets/images/stardy-logo.png",
+    image: "assets/images/Group_17.png",
     rating: 5.0,
     progress: 0.65,
     category: "Beginner",
@@ -30,7 +52,7 @@ final List<Course> courses = [
 
   Course(
     title: "HTML & CSS Bootcamp",
-    image: "assets/images/stardy-logo.png",
+    image: "assets/images/Group_17.png",
     rating: 4.7,
     progress: 0.40,
     category: "Beginner",
@@ -52,7 +74,7 @@ final List<Course> courses = [
 
   Course(
     title: "Java Programming Basics",
-    image: "assets/images/stardy-logo.png",
+    image: "assets/images/Group_17.png",
     rating: 4.6,
     progress: 0.20,
     category: "Beginner",
@@ -71,7 +93,7 @@ final List<Course> courses = [
 
   Course(
     title: "SQL for Beginners",
-    image: "assets/images/stardy-logo.png",
+    image: "assets/images/Group_17.png",
     rating: 4.9,
     progress: 0.75,
     category: "Beginner",
@@ -93,7 +115,7 @@ final List<Course> courses = [
 
   Course(
     title: "Git & GitHub Crash Course",
-    image: "assets/images/stardy-logo.png",
+    image: "assets/images/Group_17.png",
     rating: 4.8,
     progress: 0.60,
     category: "Beginner",
@@ -116,7 +138,7 @@ final List<Course> courses = [
   /// ---------------- INTERMEDIATE ----------------
   Course(
     title: "Flutter UI Design",
-    image: "assets/images/stardy-logo.png",
+    image: "assets/images/Group_17.png",
     rating: 4.8,
     progress: 0.30,
     category: "Intermediate",
@@ -135,7 +157,7 @@ final List<Course> courses = [
 
   Course(
     title: "ReactJS Complete Guide",
-    image: "assets/images/stardy-logo.png",
+    image: "assets/images/Group_17.png",
     rating: 4.9,
     progress: 0.50,
     category: "Intermediate",
@@ -157,7 +179,7 @@ final List<Course> courses = [
 
   Course(
     title: "NodeJS Backend Development",
-    image: "assets/images/stardy-logo.png",
+    image: "assets/images/Group_17.png",
     rating: 4.7,
     progress: 0.35,
     category: "Intermediate",
@@ -176,7 +198,7 @@ final List<Course> courses = [
 
   Course(
     title: "Data Structures in Java",
-    image: "assets/images/stardy-logo.png",
+    image: "assets/images/Group_17.png",
     rating: 4.6,
     progress: 0.25,
     category: "Intermediate",
@@ -198,7 +220,7 @@ final List<Course> courses = [
 
   Course(
     title: "UI/UX Design Principles",
-    image: "assets/images/stardy-logo.png",
+    image: "assets/images/course_ui_ux_principles.png",
     rating: 4.8,
     progress: 0.45,
     category: "Intermediate",
@@ -221,7 +243,7 @@ final List<Course> courses = [
   /// ---------------- ADVANCED ----------------
   Course(
     title: "Machine Learning Mastery",
-    image: "assets/images/stardy-logo.png",
+    image: "assets/images/Group_17.png",
     rating: 5.0,
     progress: 0.10,
     category: "Advanced",
@@ -243,7 +265,7 @@ final List<Course> courses = [
 
   Course(
     title: "Deep Learning with TensorFlow",
-    image: "assets/images/stardy-logo.png",
+    image: "assets/images/Group_17.png",
     rating: 4.9,
     progress: 0.05,
     category: "Advanced",
@@ -265,7 +287,7 @@ final List<Course> courses = [
 
   Course(
     title: "System Design Interview",
-    image: "assets/images/stardy-logo.png",
+    image: "assets/images/Group_17.png",
     rating: 4.8,
     progress: 0.15,
     category: "Advanced",
@@ -287,7 +309,7 @@ final List<Course> courses = [
 
   Course(
     title: "Advanced Flutter Architecture",
-    image: "assets/images/stardy-logo.png",
+    image: "assets/images/Group_17.png",
     rating: 4.7,
     progress: 0.22,
     category: "Advanced",
@@ -309,7 +331,7 @@ final List<Course> courses = [
 
   Course(
     title: "Cloud Computing with AWS",
-    image: "assets/images/stardy-logo.png",
+    image: "assets/images/Group_17.png",
     rating: 4.9,
     progress: 0.33,
     category: "Advanced",

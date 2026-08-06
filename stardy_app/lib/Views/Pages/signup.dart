@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:go_router/go_router.dart';
 import '../widgets/color_codes.dart';
 
@@ -14,15 +13,12 @@ class _AuthPageState extends State<AuthPage> {
   bool _isLogin = true;
   bool _obscurePassword = true;
 
-  final TextEditingController _usernameController = TextEditingController();
-
   final TextEditingController _emailController = TextEditingController();
 
   final TextEditingController _passwordController = TextEditingController();
 
   @override
   void dispose() {
-    _usernameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
@@ -43,7 +39,7 @@ class _AuthPageState extends State<AuthPage> {
 
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.07),
+            color: Colors.black.withValues(alpha: 0.07),
             blurRadius: 16,
             spreadRadius: 0,
             offset: const Offset(0, 3),
@@ -56,7 +52,7 @@ class _AuthPageState extends State<AuthPage> {
         obscureText: obscure ? _obscurePassword : false,
         keyboardType: keyboardType,
 
-        style: GoogleFonts.mukta(
+        style: TextStyle(
           fontSize: 15,
           color: AppColors.primaryDark,
           letterSpacing: -0.8,
@@ -65,7 +61,7 @@ class _AuthPageState extends State<AuthPage> {
         decoration: InputDecoration(
           hintText: hint,
 
-          hintStyle: GoogleFonts.mukta(
+          hintStyle: TextStyle(
             fontSize: 14,
             color: Colors.grey.shade600,
             letterSpacing: -0.8,
@@ -193,7 +189,7 @@ class _AuthPageState extends State<AuthPage> {
                     Text(
                       _isLogin ? 'Welcome Back' : 'Create Account',
 
-                      style: GoogleFonts.mukta(
+                      style: TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
                         color: AppColors.primaryDark,
@@ -202,17 +198,6 @@ class _AuthPageState extends State<AuthPage> {
                     ),
 
                     const SizedBox(height: 24),
-
-                    // USERNAME
-                    if (!_isLogin) ...[
-                      _buildInputField(
-                        controller: _usernameController,
-                        hint: 'Username',
-                        icon: Icons.person_outline,
-                      ),
-
-                      const SizedBox(height: 14),
-                    ],
 
                     // EMAIL
                     _buildInputField(
@@ -255,7 +240,7 @@ class _AuthPageState extends State<AuthPage> {
                                   ? "Don't have an account "
                                   : "Already have an account ",
 
-                              style: GoogleFonts.mukta(
+                              style: TextStyle(
                                 fontSize: 13,
                                 color: AppColors.primaryDark,
                                 letterSpacing: -0.8,
@@ -282,14 +267,9 @@ class _AuthPageState extends State<AuthPage> {
 
                       child: ElevatedButton(
                         onPressed: () {
-                          // LOGIN -> DIRECT NAVBAR
-                          if (_isLogin) {
-                            context.go('/main');
-                          }
-                          // SIGNUP -> ONBOARDING
-                          else {
-                            context.go('/onboarding');
-                          }
+                          // Onboarding already ran right after splash, so
+                          // both Login and Sign Up land straight in the app.
+                          context.go('/main');
                         },
 
                         style: ElevatedButton.styleFrom(
@@ -306,7 +286,7 @@ class _AuthPageState extends State<AuthPage> {
                         child: Text(
                           _isLogin ? 'Login' : 'Sign Up',
 
-                          style: GoogleFonts.mukta(
+                          style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w600,
                             letterSpacing: -0.8,
@@ -324,7 +304,7 @@ class _AuthPageState extends State<AuthPage> {
                             ? 'Sign in using another account'
                             : 'Sign up using another account',
 
-                        style: GoogleFonts.mukta(
+                        style: TextStyle(
                           fontSize: 13,
                           color: Colors.grey,
                           letterSpacing: -0.8,
@@ -334,43 +314,94 @@ class _AuthPageState extends State<AuthPage> {
 
                     const SizedBox(height: 16),
 
-                    // GOOGLE BUTTON
+                    // GOOGLE + LINKEDIN BUTTONS
                     Center(
-                      child: GestureDetector(
-                        onTap: () {
-                          context.go('/home');
-                        },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              context.go('/main');
+                            },
 
-                        child: Container(
-                          width: 58,
-                          height: 58,
+                            child: Container(
+                              width: 58,
+                              height: 58,
 
-                          decoration: BoxDecoration(
-                            color: AppColors.background,
+                              decoration: BoxDecoration(
+                                color: AppColors.background,
 
-                            borderRadius: BorderRadius.circular(16),
+                                borderRadius: BorderRadius.circular(16),
 
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.08),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withValues(
+                                      alpha: 0.08,
+                                    ),
 
-                                blurRadius: 14,
+                                    blurRadius: 14,
 
-                                offset: const Offset(0, 3),
+                                    offset: const Offset(0, 3),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
 
-                          child: Padding(
-                            padding: const EdgeInsets.all(12),
-
-                            child: Image.asset(
-                              'assets/images/GoogleLogo.png',
-                              width: 28,
-                              height: 28,
+                              child: const Center(
+                                child: Text(
+                                  'G',
+                                  style: TextStyle(
+                                    color: AppColors.primary,
+                                    fontSize: 26,
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
-                        ),
+
+                          const SizedBox(width: 16),
+
+                          GestureDetector(
+                            onTap: () {
+                              context.go('/main');
+                            },
+
+                            child: Container(
+                              width: 58,
+                              height: 58,
+
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF0A66C2),
+
+                                borderRadius: BorderRadius.circular(16),
+
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withValues(
+                                      alpha: 0.08,
+                                    ),
+
+                                    blurRadius: 14,
+
+                                    offset: const Offset(0, 3),
+                                  ),
+                                ],
+                              ),
+
+                              child: const Center(
+                                child: Text(
+                                  'in',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.w800,
+                                    fontStyle: FontStyle.italic,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],

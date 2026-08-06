@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
-import 'package:stardy_app/Views/Cources/Course_Source/courseCard.dart';
-import 'package:stardy_app/Views/Cources/Course_Source/courseModel.dart';
-import 'package:stardy_app/Views/Cources/Course_Source/course_data.dart';
+import 'package:stardy_app/Views/Courses/Course_Source/courseCard.dart';
+import 'package:stardy_app/Views/Courses/Course_Source/courseModel.dart';
+import 'package:stardy_app/Views/Courses/Course_Source/course_data.dart';
 
 import 'package:stardy_app/Views/widgets/color_codes.dart';
 import '../widgets/New_carousel_course/carousel_course_card.dart';
@@ -95,17 +95,9 @@ class _LearnpageState extends State<Learnpage> {
   // =====================================================
 
   Widget _topBar() {
-    return const Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-      children: [
-        Icon(Icons.notifications_none, color: AppColors.primaryDark),
-
-        CircleAvatar(
-          radius: 20,
-          backgroundImage: AssetImage("assets/images/stardy-logo.png"),
-        ),
-      ],
+    return const Align(
+      alignment: Alignment.centerLeft,
+      child: Icon(Icons.notifications_none, color: AppColors.primaryDark),
     );
   }
 
@@ -127,7 +119,7 @@ class _LearnpageState extends State<Learnpage> {
 
           boxShadow: [
             BoxShadow(
-              color: AppColors.primary.withOpacity(0.5),
+              color: AppColors.primary.withValues(alpha: 0.5),
               blurRadius: 12,
               offset: const Offset(0, 5),
             ),
@@ -174,11 +166,11 @@ class _LearnpageState extends State<Learnpage> {
 
         borderRadius: BorderRadius.circular(20),
 
-        border: Border.all(color: Colors.white.withOpacity(0.05)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
 
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.25),
+            color: Colors.black.withValues(alpha: 0.25),
             blurRadius: 12,
             offset: const Offset(0, 5),
           ),
@@ -328,13 +320,13 @@ class _LearnpageState extends State<Learnpage> {
 
           borderRadius: BorderRadius.circular(20),
 
-          border: Border.all(color: Colors.white.withOpacity(0.05)),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
 
           boxShadow: [
             BoxShadow(
               color: selected
-                  ? AppColors.primaryDark.withOpacity(0.6)
-                  : Colors.black.withOpacity(0.25),
+                  ? AppColors.primaryDark.withValues(alpha: 0.6)
+                  : Colors.black.withValues(alpha: 0.25),
 
               blurRadius: selected ? 14 : 8,
 

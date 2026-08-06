@@ -24,15 +24,15 @@ class GlassNavbar extends StatelessWidget {
           child: Container(
             height: 65,
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.10), // light transparent
+              color: Colors.white.withValues(alpha: 0.10), // light transparent
               borderRadius: BorderRadius.circular(40),
-              border: Border.all(color: Colors.white.withOpacity(0.25)),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.25)),
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
-                  Colors.white.withOpacity(0.25), // top shine
-                  Colors.white.withOpacity(0.05), // bottom fade
+                  Colors.white.withValues(alpha: 0.25), // top shine
+                  Colors.white.withValues(alpha: 0.05), // bottom fade
                 ],
               ),
             ),
@@ -42,6 +42,7 @@ class GlassNavbar extends StatelessWidget {
                 _navItem(Icons.home, 0),
                 _navItem(Icons.menu_book, 1),
                 _navItem(Icons.work, 2),
+                _navItem(Icons.person, 3),
               ],
             ),
           ),

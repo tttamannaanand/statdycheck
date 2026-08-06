@@ -2,7 +2,7 @@ class Course {
   final String title;
   final String image;
   final double rating;
-  double progress; // make mutable
+  double progress; 
   final String category;
   final String uploadDate;
   final String duration;

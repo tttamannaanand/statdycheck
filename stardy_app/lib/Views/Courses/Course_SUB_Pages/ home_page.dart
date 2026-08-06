@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../Course_Source/courseModel.dart';
 import '../../widgets/color_codes.dart';
 import '../Course_Source/Video_Larning_Page.dart';
-import '../Course_SUB_Pages/assignment_page.dart';
+import 'assignment_page.dart';
 
 class HomePage extends StatelessWidget {
   final Course course;
@@ -68,7 +68,7 @@ class HomePage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
 
                   border: Border.all(
-                    color: AppColors.primaryDark.withOpacity(0.2),
+                    color: AppColors.primaryDark.withValues(alpha: 0.2),
                   ),
                 ),
 
@@ -167,7 +167,7 @@ class HomePage extends StatelessWidget {
 
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.08),
+            color: Colors.black.withValues(alpha: 0.08),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -322,7 +322,7 @@ class HomePage extends StatelessWidget {
 
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.07),
+              color: Colors.black.withValues(alpha: 0.07),
               blurRadius: 8,
               offset: const Offset(0, 4),
             ),
@@ -364,15 +364,18 @@ class HomePage extends StatelessWidget {
             const SizedBox(width: 10),
 
             Container(
-              height: 55,
-              width: 55,
+              height: 44,
+              width: 44,
 
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.black,
+                border: Border.all(color: AppColors.primary, width: 1.5),
               ),
 
-              child: const Icon(Icons.play_arrow, color: Colors.white),
+              child: const Icon(
+                Icons.download_outlined,
+                color: AppColors.primary,
+              ),
             ),
           ],
         ),
@@ -442,7 +445,7 @@ class HomePage extends StatelessWidget {
 
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.07),
+              color: Colors.black.withValues(alpha: 0.07),
               blurRadius: 8,
               offset: const Offset(0, 4),
             ),
@@ -456,7 +459,7 @@ class HomePage extends StatelessWidget {
               width: 60,
 
               decoration: BoxDecoration(
-                color: Colors.orange.withOpacity(0.1),
+                color: Colors.orange.withValues(alpha: 0.1),
 
                 borderRadius: BorderRadius.circular(16),
               ),

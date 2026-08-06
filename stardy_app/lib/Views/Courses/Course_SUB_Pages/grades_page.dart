@@ -96,7 +96,7 @@ class GradesPage extends StatelessWidget {
 
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.06),
+              color: Colors.black.withValues(alpha: 0.06),
 
               blurRadius: 10,
 
@@ -120,7 +120,7 @@ class GradesPage extends StatelessWidget {
 
                     strokeWidth: 8,
 
-                    backgroundColor: color.withOpacity(0.15),
+                    backgroundColor: color.withValues(alpha: 0.15),
 
                     valueColor: AlwaysStoppedAnimation(color),
                   ),
@@ -171,7 +171,7 @@ class GradesPage extends StatelessWidget {
                         ),
 
                         decoration: BoxDecoration(
-                          color: color.withOpacity(0.1),
+                          color: color.withValues(alpha: 0.1),
 
                           borderRadius: BorderRadius.circular(10),
                         ),

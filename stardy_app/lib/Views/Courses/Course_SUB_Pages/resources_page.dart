@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../../widgets/color_codes.dart';
 
 class ResourcesPage extends StatelessWidget {
   const ResourcesPage({super.key});
@@ -17,21 +18,6 @@ class ResourcesPage extends StatelessWidget {
 
           children: [
             const SizedBox(height: 20),
-
-            // =====================================================
-            // NOTES TITLE
-            // =====================================================
-            const Text(
-              "Notes",
-
-              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-            ),
-
-            const SizedBox(height: 20),
-
-            const NotesTab(),
-
-            const SizedBox(height: 40),
 
             // =====================================================
             // REFERENCES TITLE
@@ -128,7 +114,7 @@ class NotesTab extends StatelessWidget {
 
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.06),
+              color: Colors.black.withValues(alpha: 0.06),
 
               blurRadius: 10,
 
@@ -144,14 +130,14 @@ class NotesTab extends StatelessWidget {
               width: 65,
 
               decoration: BoxDecoration(
-                color: Colors.blue.withOpacity(0.1),
+                color: AppColors.primaryDark.withValues(alpha: 0.1),
 
                 borderRadius: BorderRadius.circular(18),
               ),
 
               child: const Icon(
                 Icons.note_alt_outlined,
-                color: Colors.blue,
+                color: AppColors.primaryDark,
                 size: 32,
               ),
             ),
@@ -320,7 +306,7 @@ class ReferenceTab extends StatelessWidget {
 
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.06),
+              color: Colors.black.withValues(alpha: 0.06),
 
               blurRadius: 10,
 
@@ -336,14 +322,14 @@ class ReferenceTab extends StatelessWidget {
               width: 65,
 
               decoration: BoxDecoration(
-                color: Colors.orange.withOpacity(0.1),
+                color: AppColors.primary.withValues(alpha: 0.1),
 
                 borderRadius: BorderRadius.circular(18),
               ),
 
               child: const Icon(
                 Icons.menu_book_rounded,
-                color: Colors.orange,
+                color: AppColors.primary,
                 size: 32,
               ),
             ),
