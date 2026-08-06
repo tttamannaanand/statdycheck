@@ -6,8 +6,13 @@ import '../Course_SUB_Pages/quiz_page.dart';
 
 class VideoLearningPage extends StatefulWidget {
   final Course course;
+  final int initialIndex;
 
-  const VideoLearningPage({super.key, required this.course});
+  const VideoLearningPage({
+    super.key,
+    required this.course,
+    this.initialIndex = 0,
+  });
 
   @override
   State<VideoLearningPage> createState() => _VideoLearningPageState();
@@ -15,6 +20,7 @@ class VideoLearningPage extends StatefulWidget {
 
 class _VideoLearningPageState extends State<VideoLearningPage> {
   YoutubePlayerController? _controller;
+  VoidCallback? _positionListener;
 
   int currentIndex = 0;
   String? currentVideoId;
@@ -34,7 +40,7 @@ class _VideoLearningPageState extends State<VideoLearningPage> {
     flattenVideos();
 
     if (allVideos.isNotEmpty) {
-      loadVideo(0);
+      loadVideo(widget.initialIndex.clamp(0, allVideos.length - 1));
     }
   }
 
@@ -57,12 +63,25 @@ class _VideoLearningPageState extends State<VideoLearningPage> {
   // =====================================================
 
   void loadVideo(int index) {
+    if (index < 0 || index >= allVideos.length) return;
+
     String url = allVideos[index]["url"]!;
 
     String? videoId = YoutubePlayer.convertUrlToId(url);
 
-    if (videoId == null) return;
+    if (videoId == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('This video is unavailable')),
+        );
+      });
+      return;
+    }
 
+    if (_positionListener != null) {
+      _controller?.removeListener(_positionListener!);
+    }
     _controller?.dispose();
 
     _controller = YoutubePlayerController(
@@ -71,14 +90,21 @@ class _VideoLearningPageState extends State<VideoLearningPage> {
       flags: const YoutubePlayerFlags(autoPlay: true, mute: false),
     );
 
-    _controller!.addListener(() {
-      if (_controller!.value.position >= _controller!.value.metaData.duration &&
-          !_controller!.value.isPlaying) {
-        completedVideos.add(videoId);
-      }
+    _positionListener = () {
+      if (!mounted) return;
 
-      setState(() {});
-    });
+      final controller = _controller;
+      if (controller == null) return;
+
+      final isComplete =
+          controller.value.position >= controller.value.metaData.duration &&
+          !controller.value.isPlaying;
+
+      if (isComplete && completedVideos.add(videoId)) {
+        setState(() {});
+      }
+    };
+    _controller!.addListener(_positionListener!);
 
     setState(() {
       currentIndex = index;
@@ -138,6 +164,9 @@ class _VideoLearningPageState extends State<VideoLearningPage> {
 
   @override
   void dispose() {
+    if (_positionListener != null) {
+      _controller?.removeListener(_positionListener!);
+    }
     _controller?.dispose();
     super.dispose();
   }
@@ -373,6 +402,11 @@ class _VideoLearningPageState extends State<VideoLearningPage> {
       itemBuilder: (context, chapterIndex) {
         var chapter = widget.course.chapters[chapterIndex];
 
+        int chapterStart = 0;
+        for (int i = 0; i < chapterIndex; i++) {
+          chapterStart += widget.course.chapters[i].topics.length;
+        }
+
         return ExpansionTile(
           collapsedIconColor: Colors.black,
 
@@ -390,9 +424,7 @@ class _VideoLearningPageState extends State<VideoLearningPage> {
           children: List.generate(chapter.topics.length, (topicIndex) {
             var topic = chapter.topics[topicIndex];
 
-            int flatIndex = allVideos.indexWhere(
-              (video) => video["url"] == topic.videoUrl,
-            );
+            int flatIndex = chapterStart + topicIndex;
 
             return ListTile(
               leading: const Icon(Icons.play_circle_fill, color: AppColors.primary),

@@ -294,7 +294,7 @@ class AssignmentPage extends StatelessWidget {
                   height: 55,
 
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: null,
 
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.black,

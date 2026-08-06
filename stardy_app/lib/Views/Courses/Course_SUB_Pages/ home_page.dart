@@ -115,10 +115,18 @@ class HomePage extends StatelessWidget {
 
         const SizedBox(height: 12),
 
-        const Text("0 Assignments due", style: TextStyle(color: Colors.grey)),
+        Text(
+          "${_assignments.length} Assignments due",
+          style: const TextStyle(color: Colors.grey),
+        ),
       ],
     );
   }
+
+  static const List<Map<String, String>> _assignments = [
+    {"title": "UI Design Assignment", "due": "Due Tomorrow"},
+    {"title": "Flutter App Assignment", "due": "Due in 3 Days"},
+  ];
 
   // =====================================================
   // DESCRIPTION SECTION
@@ -155,6 +163,12 @@ class HomePage extends StatelessWidget {
   // =====================================================
 
   Widget _buildCurrentVideoCard(BuildContext context) {
+    final hasTopics =
+        course.chapters.isNotEmpty && course.chapters.first.topics.isNotEmpty;
+    final firstTitle = hasTopics
+        ? course.chapters.first.topics.first.title
+        : "No lessons available yet";
+
     return Container(
       padding: const EdgeInsets.all(18),
 
@@ -179,7 +193,7 @@ class HomePage extends StatelessWidget {
 
         children: [
           Text(
-            course.chapters.first.topics.first.title,
+            firstTitle,
 
             style: const TextStyle(
               fontSize: 22,
@@ -209,15 +223,17 @@ class HomePage extends StatelessWidget {
               const Spacer(),
 
               GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
+                onTap: !hasTopics
+                    ? null
+                    : () {
+                        Navigator.push(
+                          context,
 
-                    MaterialPageRoute(
-                      builder: (_) => VideoLearningPage(course: course),
-                    ),
-                  );
-                },
+                          MaterialPageRoute(
+                            builder: (_) => VideoLearningPage(course: course),
+                          ),
+                        );
+                      },
 
                 child: Container(
                   padding: const EdgeInsets.symmetric(
@@ -226,7 +242,7 @@ class HomePage extends StatelessWidget {
                   ),
 
                   decoration: BoxDecoration(
-                    color: Colors.black,
+                    color: hasTopics ? Colors.black : Colors.grey,
 
                     borderRadius: BorderRadius.circular(14),
                   ),
@@ -269,6 +285,8 @@ class HomePage extends StatelessWidget {
   // =====================================================
 
   Widget _buildUpNextSection(BuildContext context) {
+    final flatTopics = course.chapters.expand((c) => c.topics).toList();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
 
@@ -285,15 +303,12 @@ class HomePage extends StatelessWidget {
 
         const SizedBox(height: 20),
 
-        ...course.chapters.expand(
-          (chapter) => chapter.topics.map(
-            (topic) => Padding(
-              padding: const EdgeInsets.only(bottom: 16),
+        for (int i = 0; i < flatTopics.length; i++)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 16),
 
-              child: _buildVideoCard(context, topic.title),
-            ),
+            child: _buildVideoCard(context, flatTopics[i].title, i),
           ),
-        ),
       ],
     );
   }
@@ -302,13 +317,16 @@ class HomePage extends StatelessWidget {
   // VIDEO CARD
   // =====================================================
 
-  Widget _buildVideoCard(BuildContext context, String title) {
+  Widget _buildVideoCard(BuildContext context, String title, int index) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
 
-          MaterialPageRoute(builder: (_) => VideoLearningPage(course: course)),
+          MaterialPageRoute(
+            builder: (_) =>
+                VideoLearningPage(course: course, initialIndex: index),
+          ),
         );
       },
 
@@ -404,15 +422,14 @@ class HomePage extends StatelessWidget {
 
         const SizedBox(height: 20),
 
-        _buildAssignmentCard(context, "UI Design Assignment", "Due Tomorrow"),
-
-        const SizedBox(height: 16),
-
-        _buildAssignmentCard(
-          context,
-          "Flutter App Assignment",
-          "Due in 3 Days",
-        ),
+        for (int i = 0; i < _assignments.length; i++) ...[
+          if (i > 0) const SizedBox(height: 16),
+          _buildAssignmentCard(
+            context,
+            _assignments[i]["title"]!,
+            _assignments[i]["due"]!,
+          ),
+        ],
       ],
     );
   }

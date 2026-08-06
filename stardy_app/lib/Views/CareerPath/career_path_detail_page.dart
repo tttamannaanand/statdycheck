@@ -46,8 +46,8 @@ class CareerPathDetailPage extends StatelessWidget {
               const SizedBox(height: 24),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-                  Text(
+                children: [
+                  const Text(
                     'Upcoming',
                     style: TextStyle(
                       color: AppColors.textPrimary,
@@ -55,11 +55,22 @@ class CareerPathDetailPage extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Text(
-                    'See all',
-                    style: TextStyle(
-                      color: AppColors.textSecondary,
-                      decoration: TextDecoration.underline,
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          settings: const RouteSettings(name: '/module-list'),
+                          builder: (_) => ModuleListPage(pathName: pathName),
+                        ),
+                      );
+                    },
+                    child: const Text(
+                      'See all',
+                      style: TextStyle(
+                        color: AppColors.textSecondary,
+                        decoration: TextDecoration.underline,
+                      ),
                     ),
                   ),
                 ],

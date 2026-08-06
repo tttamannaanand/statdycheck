@@ -254,6 +254,7 @@ class ReferenceTab extends StatelessWidget {
     return Column(
       children: [
         _ebookCard(
+          context: context,
           title: "Flutter Complete Guide",
           author: "Google Developers",
           url: "https://docs.flutter.dev/",
@@ -262,6 +263,7 @@ class ReferenceTab extends StatelessWidget {
         const SizedBox(height: 18),
 
         _ebookCard(
+          context: context,
           title: "Dart Programming Ebook",
           author: "Dart Team",
           url: "https://dart.dev/guides",
@@ -270,6 +272,7 @@ class ReferenceTab extends StatelessWidget {
         const SizedBox(height: 18),
 
         _ebookCard(
+          context: context,
           title: "Firebase Documentation",
           author: "Firebase",
           url: "https://firebase.google.com/docs",
@@ -283,6 +286,7 @@ class ReferenceTab extends StatelessWidget {
   // =========================================================
 
   Widget _ebookCard({
+    required BuildContext context,
     required String title,
     required String author,
     required String url,
@@ -290,9 +294,17 @@ class ReferenceTab extends StatelessWidget {
     return GestureDetector(
       onTap: () async {
         final Uri uri = Uri.parse(url);
+        final messenger = ScaffoldMessenger.of(context);
 
+        bool launched = false;
         if (await canLaunchUrl(uri)) {
-          await launchUrl(uri, mode: LaunchMode.externalApplication);
+          launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
+        }
+
+        if (!launched) {
+          messenger.showSnackBar(
+            SnackBar(content: Text('Couldn\'t open $title')),
+          );
         }
       },
 

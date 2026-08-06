@@ -75,14 +75,6 @@ class ProfilePage extends StatelessWidget {
                   child: const Icon(Icons.chevron_left, color: Colors.black),
                 ),
               ),
-              const Text(
-                'Profile',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 22,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
               Row(
                 children: [
                   const Icon(Icons.ios_share, color: Colors.white70, size: 22),
@@ -500,8 +492,8 @@ class ProfilePage extends StatelessWidget {
       onTap: () {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Signing in with $label...'),
-            duration: const Duration(seconds: 1),
+            content: Text('$label sign-in isn\'t available in this demo yet'),
+            duration: const Duration(seconds: 2),
           ),
         );
       },

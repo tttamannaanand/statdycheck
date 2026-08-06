@@ -257,7 +257,7 @@ class AssignmentResultPage extends StatelessWidget {
                   const SizedBox(height: 10),
 
                   Text(
-                    "Marks Obtained: ${percentage ~/ 10}/10",
+                    "Marks Obtained: ${(percentage / 10).round()}/10",
 
                     style: const TextStyle(fontSize: 18, color: Colors.grey),
                   ),

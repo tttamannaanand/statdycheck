@@ -104,6 +104,7 @@ class HomePage extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
+                settings: const RouteSettings(name: '/course-details'),
                 builder: (_) => CourseDetailsPage(course: courses[0]),
               ),
             );

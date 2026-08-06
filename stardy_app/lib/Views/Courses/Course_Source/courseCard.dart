@@ -14,7 +14,10 @@ class CourseCard extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (_) => CourseDetailsPage(course: course)),
+          MaterialPageRoute(
+            settings: const RouteSettings(name: '/course-details'),
+            builder: (_) => CourseDetailsPage(course: course),
+          ),
         );
       },
       child: Container(
@@ -112,25 +115,30 @@ class CourseCard extends StatelessWidget {
                   const SizedBox(height: 10),
 
                   // PROGRESS BAR
-                  Row(
-                    children: [
-                      Expanded(
-                        child: LinearProgressIndicator(
-                          value: course.progress,
-                          backgroundColor: Colors.grey[800],
-                          color: AppColors.primary,
-                          minHeight: 5,
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        "${(course.progress * 100).toInt()}%",
-                        style: const TextStyle(
-                          color: Colors.grey,
-                          fontSize: 12,
-                        ),
-                      ),
-                    ],
+                  Builder(
+                    builder: (context) {
+                      final clampedProgress = course.progress.clamp(0.0, 1.0);
+                      return Row(
+                        children: [
+                          Expanded(
+                            child: LinearProgressIndicator(
+                              value: clampedProgress,
+                              backgroundColor: Colors.grey[800],
+                              color: AppColors.primary,
+                              minHeight: 5,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            "${(clampedProgress * 100).toInt()}%",
+                            style: const TextStyle(
+                              color: Colors.grey,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
+                      );
+                    },
                   ),
                 ],
               ),
@@ -152,6 +160,7 @@ class CourseCard extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
+                    settings: const RouteSettings(name: '/course-details'),
                     builder: (_) => CourseDetailsPage(course: course),
                   ),
                 );

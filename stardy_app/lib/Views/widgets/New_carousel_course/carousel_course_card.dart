@@ -16,7 +16,10 @@ class CarouselCourseCard extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (_) => CourseDetailsPage(course: course)),
+          MaterialPageRoute(
+            settings: const RouteSettings(name: '/course-details'),
+            builder: (_) => CourseDetailsPage(course: course),
+          ),
         );
       },
 

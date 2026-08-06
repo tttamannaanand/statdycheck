@@ -65,7 +65,7 @@ class SubmissionReceivedPage extends StatelessWidget {
                       ),
                     ),
                     child: const Text(
-                      'Back to course',
+                      'Continue',
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,

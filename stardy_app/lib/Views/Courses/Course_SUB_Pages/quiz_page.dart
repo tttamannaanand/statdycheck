@@ -77,7 +77,41 @@ class _QuizPageState extends State<QuizPage> {
     });
   }
 
-  void _submitQuiz() {
+  Future<void> _submitQuiz() async {
+    final unanswered = _sampleQuestions.length - _selectedAnswers.length;
+
+    if (unanswered > 0) {
+      final flaggedUnanswered = _flagged
+          .where((i) => !_selectedAnswers.containsKey(i))
+          .length;
+      final message = StringBuffer(
+        'You have $unanswered unanswered question${unanswered == 1 ? '' : 's'}.',
+      );
+      if (flaggedUnanswered > 0) {
+        message.write(' $flaggedUnanswered of them ${flaggedUnanswered == 1 ? 'is' : 'are'} flagged for review.');
+      }
+
+      final shouldSubmit = await showDialog<bool>(
+        context: context,
+        builder: (dialogContext) => AlertDialog(
+          title: const Text('Submit quiz?'),
+          content: Text(message.toString()),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext, false),
+              child: const Text('Keep Reviewing'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext, true),
+              child: const Text('Submit Anyway'),
+            ),
+          ],
+        ),
+      );
+
+      if (shouldSubmit != true) return;
+    }
+
     int correct = 0;
     for (var i = 0; i < _sampleQuestions.length; i++) {
       if (_selectedAnswers[i] == _sampleQuestions[i].correctIndex) {
@@ -85,6 +119,7 @@ class _QuizPageState extends State<QuizPage> {
       }
     }
 
+    if (!mounted) return;
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -107,20 +142,19 @@ class _QuizPageState extends State<QuizPage> {
         child: Column(
           children: [
             // PROGRESS BAR
-            ClipRRect(
-              child: LinearProgressIndicator(
-                value: (_currentIndex + 1) / _sampleQuestions.length,
-                minHeight: 4,
-                backgroundColor: Colors.black12,
-                color: AppColors.primary,
-              ),
+            LinearProgressIndicator(
+              value: (_currentIndex + 1) / _sampleQuestions.length,
+              minHeight: 4,
+              backgroundColor: Colors.black12,
+              color: AppColors.primary,
             ),
 
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
                   const SizedBox(height: 16),
 
                   // TOP ROW
@@ -228,6 +262,7 @@ class _QuizPageState extends State<QuizPage> {
                     );
                   }),
                 ],
+                ),
               ),
             ),
           ],

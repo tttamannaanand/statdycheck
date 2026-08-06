@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../widgets/color_codes.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -66,7 +67,7 @@ class SettingsPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     const Text(
-                      'Ph No - 8095226987',
+                      'Ph No - +1 555-0100',
                       style: TextStyle(
                         color: AppColors.textSecondary,
                         fontSize: 13,
@@ -109,6 +110,7 @@ class SettingsPage extends StatelessWidget {
                 title: 'Log Out',
                 isDestructive: true,
                 showChevron: false,
+                onTap: () => context.go('/auth'),
               ),
               const SizedBox(height: 32),
             ],
@@ -125,15 +127,20 @@ class SettingsPage extends StatelessWidget {
     String? value,
     bool isDestructive = false,
     bool showChevron = true,
+    VoidCallback? onTap,
   }) {
     final color = isDestructive ? AppColors.primary : AppColors.textPrimary;
 
     return GestureDetector(
-      onTap: () {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(title), duration: const Duration(seconds: 1)),
-        );
-      },
+      onTap: onTap ??
+          () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(title),
+                duration: const Duration(seconds: 1),
+              ),
+            );
+          },
       child: Container(
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),

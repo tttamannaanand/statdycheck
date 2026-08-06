@@ -21,9 +21,13 @@ class _OpportunitiesPageState extends State<OpportunitiesPage> {
         ? internships
         : projects;
 
+    final query = _query.toLowerCase();
     final filtered = currentList
         .where(
-          (opp) => opp.title.toLowerCase().contains(_query.toLowerCase()),
+          (opp) =>
+              opp.title.toLowerCase().contains(query) ||
+              opp.company.toLowerCase().contains(query) ||
+              opp.category.toLowerCase().contains(query),
         )
         .toList();
 
@@ -409,7 +413,7 @@ class _OpportunitiesPageState extends State<OpportunitiesPage> {
                   borderRadius: BorderRadius.circular(18),
                 ),
               ),
-              onPressed: () {},
+              onPressed: null,
               child: const Text(
                 'Apply Now',
                 style: TextStyle(

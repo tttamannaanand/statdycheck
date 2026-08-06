@@ -197,6 +197,16 @@ class _ProjectSubmissionPageState extends State<ProjectSubmissionPage> {
             height: 54,
             child: ElevatedButton(
               onPressed: () {
+                final hasLink = _linkController.text.trim().isNotEmpty;
+                final hasFile = _attachedFileName != null;
+                if (!hasLink && !hasFile) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Attach a file or add a link before submitting'),
+                    ),
+                  );
+                  return;
+                }
                 Navigator.push(
                   context,
                   MaterialPageRoute(

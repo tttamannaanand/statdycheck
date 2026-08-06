@@ -42,11 +42,25 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
           ),
         ),
 
-        actions: const [
-          Icon(Icons.access_time, color: Colors.black),
-          SizedBox(width: 16),
-          Icon(Icons.more_vert, color: Colors.black),
-          SizedBox(width: 8),
+        actions: [
+          IconButton(
+            tooltip: 'History',
+            icon: const Icon(Icons.access_time, color: Colors.black),
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Course history coming soon')),
+              );
+            },
+          ),
+          IconButton(
+            tooltip: 'More options',
+            icon: const Icon(Icons.more_vert, color: Colors.black),
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('More options coming soon')),
+              );
+            },
+          ),
         ],
 
         bottom: PreferredSize(

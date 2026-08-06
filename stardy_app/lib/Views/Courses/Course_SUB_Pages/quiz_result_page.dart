@@ -42,13 +42,18 @@ class QuizResultPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
-              Image.asset('assets/images/icon_trophy.png', width: 72),
+              Image.asset(
+                'assets/images/icon_trophy.png',
+                width: 72,
+                errorBuilder: (context, error, stackTrace) =>
+                    const Icon(Icons.emoji_events, size: 72, color: AppColors.primary),
+              ),
               const SizedBox(height: 28),
               SizedBox(
                 width: double.infinity,
                 height: 50,
                 child: OutlinedButton(
-                  onPressed: () {},
+                  onPressed: null,
                   style: OutlinedButton.styleFrom(
                     side: BorderSide(color: Colors.grey.shade300),
                     shape: RoundedRectangleBorder(
@@ -70,8 +75,9 @@ class QuizResultPage extends StatelessWidget {
                 height: 50,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pop();
+                    Navigator.of(
+                      context,
+                    ).popUntil(ModalRoute.withName('/course-details'));
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.black,
