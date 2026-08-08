@@ -1,8 +1,42 @@
 import 'package:flutter/material.dart';
 import '../widgets/color_codes.dart';
+import '../../services/auth_service.dart';
+import '../../services/firestore_service.dart';
 
-class LevelUpPage extends StatelessWidget {
-  const LevelUpPage({super.key});
+class LevelUpPage extends StatefulWidget {
+  final VoidCallback? onContinue;
+  final int xpEarned;
+
+  const LevelUpPage({super.key, this.onContinue, this.xpEarned = 7750});
+
+  @override
+  State<LevelUpPage> createState() => _LevelUpPageState();
+}
+
+class _LevelUpPageState extends State<LevelUpPage> {
+  @override
+  void initState() {
+    super.initState();
+    _saveProgress();
+  }
+
+  Future<void> _saveProgress() async {
+    final uid = AuthService.instance.currentUser?.uid;
+    if (uid == null) return;
+
+    try {
+      final profile = await UserProfileService.instance.fetchProfile(uid);
+      final currentXp = (profile?['xp'] as int?) ?? 0;
+      final currentLevel = (profile?['level'] as int?) ?? 1;
+      await UserProfileService.instance.updateXp(
+        uid,
+        xp: currentXp + widget.xpEarned,
+        level: currentLevel + 1,
+      );
+    } catch (_) {
+      // No Firestore project configured yet — level up just won't persist.
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -95,11 +129,12 @@ class LevelUpPage extends StatelessWidget {
                 width: double.infinity,
                 height: 56,
                 child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(
-                      context,
-                    ).popUntil(ModalRoute.withName('/module-list'));
-                  },
+                  onPressed: widget.onContinue ??
+                      () {
+                        Navigator.of(
+                          context,
+                        ).popUntil(ModalRoute.withName('/module-list'));
+                      },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.black,
                     shape: RoundedRectangleBorder(

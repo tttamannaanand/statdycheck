@@ -1,14 +1,51 @@
 import 'package:flutter/material.dart';
 import '../../widgets/color_codes.dart';
+import '../../../services/auth_service.dart';
+import '../../../services/firestore_service.dart';
+import 'remedial_quiz_page.dart';
 
-class QuizResultPage extends StatelessWidget {
+class QuizResultPage extends StatefulWidget {
   final int correct;
   final int total;
+  final String title;
 
-  const QuizResultPage({super.key, required this.correct, required this.total});
+  const QuizResultPage({
+    super.key,
+    required this.correct,
+    required this.total,
+    this.title = 'this course',
+  });
+
+  @override
+  State<QuizResultPage> createState() => _QuizResultPageState();
+}
+
+class _QuizResultPageState extends State<QuizResultPage> {
+  @override
+  void initState() {
+    super.initState();
+    _saveGrade();
+  }
+
+  Future<void> _saveGrade() async {
+    final uid = AuthService.instance.currentUser?.uid;
+    if (uid == null) return;
+
+    final percentage = widget.total == 0
+        ? 0
+        : ((widget.correct / widget.total) * 100).round();
+    try {
+      await UserProfileService.instance.setGrade(uid, widget.title, percentage);
+    } catch (_) {
+      // No Firestore project configured yet — score just won't persist.
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    final correct = widget.correct;
+    final total = widget.total;
+    final title = widget.title;
     final percentage = total == 0 ? 0 : ((correct / total) * 100).round();
 
     return Scaffold(
@@ -69,6 +106,36 @@ class QuizResultPage extends StatelessWidget {
                   ),
                 ),
               ),
+              if (correct < total) ...[
+                const SizedBox(height: 12),
+                SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => RemedialQuizPage(title: title),
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    ),
+                    child: const Text(
+                      'Practice Weak Areas',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
               const SizedBox(height: 12),
               SizedBox(
                 width: double.infinity,

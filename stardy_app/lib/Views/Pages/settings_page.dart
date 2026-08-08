@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../widgets/color_codes.dart';
+import '../../services/auth_service.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -110,7 +111,15 @@ class SettingsPage extends StatelessWidget {
                 title: 'Log Out',
                 isDestructive: true,
                 showChevron: false,
-                onTap: () => context.go('/auth'),
+                onTap: () async {
+                  try {
+                    await AuthService.instance.signOut();
+                  } catch (_) {
+                    // No Firebase session to sign out of yet — still route
+                    // the user out of the authenticated area below.
+                  }
+                  if (context.mounted) context.go('/auth');
+                },
               ),
               const SizedBox(height: 32),
             ],

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
 import '../widgets/color_codes.dart';
+import '../../services/auth_service.dart';
+import '../../services/firestore_service.dart';
 
 class AuthPage extends StatefulWidget {
   const AuthPage({super.key});
@@ -12,6 +15,7 @@ class AuthPage extends StatefulWidget {
 class _AuthPageState extends State<AuthPage> {
   bool _isLogin = true;
   bool _obscurePassword = true;
+  bool _isSubmitting = false;
 
   final TextEditingController _emailController = TextEditingController();
 
@@ -22,6 +26,67 @@ class _AuthPageState extends State<AuthPage> {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  Future<void> _submitEmailAuth() async {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text;
+
+    if (email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Enter an email and password')),
+      );
+      return;
+    }
+
+    setState(() => _isSubmitting = true);
+    try {
+      if (_isLogin) {
+        await AuthService.instance.signInWithEmail(email, password);
+      } else {
+        final credential = await AuthService.instance.signUpWithEmail(
+          email,
+          password,
+        );
+        final uid = credential.user?.uid;
+        if (uid != null) {
+          try {
+            await UserProfileService.instance.updateXp(uid, xp: 0, level: 1);
+          } catch (_) {
+            // No Firestore project configured yet — profile just won't seed.
+          }
+        }
+      }
+      if (!mounted) return;
+      context.go('/main');
+    } on FirebaseAuthException catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.message ?? 'Authentication failed')),
+      );
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Sign-in isn't available yet — backend not configured"),
+        ),
+      );
+    } finally {
+      if (mounted) setState(() => _isSubmitting = false);
+    }
+  }
+
+  Future<void> _submitGoogleAuth() async {
+    try {
+      final credential = await AuthService.instance.signInWithGoogle();
+      if (credential == null || !mounted) return;
+      context.go('/main');
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Google sign-in isn't configured yet")),
+      );
+    }
   }
 
   Widget _buildInputField({
@@ -266,11 +331,7 @@ class _AuthPageState extends State<AuthPage> {
                       height: 56,
 
                       child: ElevatedButton(
-                        onPressed: () {
-                          // Onboarding already ran right after splash, so
-                          // both Login and Sign Up land straight in the app.
-                          context.go('/main');
-                        },
+                        onPressed: _isSubmitting ? null : _submitEmailAuth,
 
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.primaryDark,
@@ -283,15 +344,24 @@ class _AuthPageState extends State<AuthPage> {
                           elevation: 0,
                         ),
 
-                        child: Text(
-                          _isLogin ? 'Login' : 'Sign Up',
+                        child: _isSubmitting
+                            ? const SizedBox(
+                                width: 22,
+                                height: 22,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2.4,
+                                  color: Colors.white,
+                                ),
+                              )
+                            : Text(
+                                _isLogin ? 'Login' : 'Sign Up',
 
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                            letterSpacing: -0.8,
-                          ),
-                        ),
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600,
+                                  letterSpacing: -0.8,
+                                ),
+                              ),
                       ),
                     ),
 
@@ -320,9 +390,7 @@ class _AuthPageState extends State<AuthPage> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           GestureDetector(
-                            onTap: () {
-                              context.go('/main');
-                            },
+                            onTap: _submitGoogleAuth,
 
                             child: Container(
                               width: 58,
@@ -363,7 +431,13 @@ class _AuthPageState extends State<AuthPage> {
 
                           GestureDetector(
                             onTap: () {
-                              context.go('/main');
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                    "LinkedIn sign-in isn't available in this demo yet",
+                                  ),
+                                ),
+                              );
                             },
 
                             child: Container(

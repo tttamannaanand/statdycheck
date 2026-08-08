@@ -25,6 +25,14 @@ dependencies:
   go_router: ^13.0.0
   carousel_slider: ^5.0.0
 
+  # Backend SDKs — see lib/services/ for usage. Requires a Firebase project
+  # (google-services.json / GoogleService-Info.plist) to actually connect;
+  # calls fail gracefully until one is configured.
+  firebase_core: ^3.6.0
+  firebase_auth: ^5.3.1
+  cloud_firestore: ^5.4.4
+  google_sign_in: ^6.2.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

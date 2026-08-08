@@ -2,9 +2,47 @@ import 'package:flutter/material.dart';
 import '../CareerPath/career_path_detail_page.dart';
 import '../widgets/color_codes.dart';
 import 'settings_page.dart';
+import '../../services/auth_service.dart';
+import '../../services/firestore_service.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
+
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  // Demo defaults — overwritten by Firestore data if a user is signed in
+  // and a users/{uid} document exists.
+  String _username = '@sai_12';
+  int _xp = 1899;
+  int _level = 12;
+  double _xpProgress = 0.63;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadProfile();
+  }
+
+  Future<void> _loadProfile() async {
+    final uid = AuthService.instance.currentUser?.uid;
+    if (uid == null) return;
+
+    try {
+      final data = await UserProfileService.instance.fetchProfile(uid);
+      if (data == null || !mounted) return;
+      setState(() {
+        _username = data['username'] as String? ?? _username;
+        _xp = data['xp'] as int? ?? _xp;
+        _level = data['level'] as int? ?? _level;
+        _xpProgress = (data['xpProgress'] as num?)?.toDouble() ?? _xpProgress;
+      });
+    } catch (_) {
+      // No Firestore project configured yet — keep showing demo data.
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -113,9 +151,9 @@ class ProfilePage extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
-          const Text(
-            '@sai_12',
-            style: TextStyle(
+          Text(
+            _username,
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 15,
               fontWeight: FontWeight.w500,
@@ -133,19 +171,19 @@ class ProfilePage extends StatelessWidget {
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: const [
+          children: [
             Text.rich(
               TextSpan(
                 children: [
                   TextSpan(
-                    text: '1899 ',
-                    style: TextStyle(
+                    text: '$_xp ',
+                    style: const TextStyle(
                       color: AppColors.textPrimary,
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  TextSpan(
+                  const TextSpan(
                     text: 'XP',
                     style: TextStyle(
                       color: AppColors.primary,
@@ -159,7 +197,7 @@ class ProfilePage extends StatelessWidget {
             Text.rich(
               TextSpan(
                 children: [
-                  TextSpan(
+                  const TextSpan(
                     text: 'LEVEL ',
                     style: TextStyle(
                       color: AppColors.textPrimary,
@@ -168,8 +206,8 @@ class ProfilePage extends StatelessWidget {
                     ),
                   ),
                   TextSpan(
-                    text: '12',
-                    style: TextStyle(
+                    text: '$_level',
+                    style: const TextStyle(
                       color: AppColors.primary,
                       fontSize: 15,
                       fontWeight: FontWeight.w700,
@@ -182,7 +220,7 @@ class ProfilePage extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         TweenAnimationBuilder<double>(
-          tween: Tween(begin: 0, end: 0.63),
+          tween: Tween(begin: 0, end: _xpProgress),
           duration: const Duration(milliseconds: 900),
           curve: Curves.easeOutCubic,
           builder: (context, value, _) => ClipRRect(

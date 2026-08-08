@@ -126,6 +126,7 @@ class _QuizPageState extends State<QuizPage> {
         builder: (_) => QuizResultPage(
           correct: correct,
           total: _sampleQuestions.length,
+          title: widget.title,
         ),
       ),
     );
